@@ -1,10 +1,18 @@
 #include "LZWEncoder.h"
+#include <string.h>
 #include <stdio.h>
 #include <malloc.h>
 
 char *codeNewAndAppend(char *oldCode, char codeToAppend){
-
-return codeToAppend;
+  char *newCode = malloc((strlen(oldCode))+ 2);
+  
+  strcpy(newCode, oldCode);
+  newCode[(strlen(newCode))] = codeToAppend;
+  newCode[(strlen(newCode))+1] = '\0';  
+  // newCode[1] = codeToAppend;
+  // newCode[2] = '\0';
+  printf("%d", (strlen(newCode)));
+  return newCode;
 }
 
 Dictionary *dictionaryNew(int length){

@@ -15,16 +15,9 @@ void test_dictionaryNew_add_new_dict(){
 
 void test_codeNewAndAppend(){
   Dictionary *dictionary = dictionaryNew(40);
-  char shouldAdd = 'a';
+  char shouldAdd = 'a'; 
   
-  
-  dictionary->entries[0].code = NULL;
-  
-  codeNewAndAppend("", shouldAdd);
-  
-  
-  TEST_ASSERT_EQUAL('a', dictionary->entries[0].code);
-
+  TEST_ASSERT_EQUAL_STRING("ba",codeNewAndAppend("b", shouldAdd));
 }
 
 
