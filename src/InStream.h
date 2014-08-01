@@ -2,7 +2,7 @@
 #define InStream_H
 
 typedef struct InStream{
-  //FILE *file;
+  FILE *file;
   char *filename;
   char *buffer;
   int length;

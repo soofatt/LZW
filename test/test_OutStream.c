@@ -1,4 +1,5 @@
 #include "unity.h"
+#include <stdio.h>
 #include "OutStream.h"
 
 void setUp(void)
