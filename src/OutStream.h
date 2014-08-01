@@ -2,7 +2,11 @@
 #define OutStream_H
 
 typedef struct{
-
+  char *filename;
+  char *buffer;
+  int length;
+  char byteIndex;
+  char bitIndex;
 }OutStream;
 
 void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize);

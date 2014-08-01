@@ -7,11 +7,9 @@ char *codeNewAndAppend(char *oldCode, char codeToAppend){
   char *newCode = malloc((strlen(oldCode))+ 2);
   
   strcpy(newCode, oldCode);
-  newCode[(strlen(newCode))] = codeToAppend;
-  newCode[(strlen(newCode))+1] = '\0';  
-  // newCode[1] = codeToAppend;
-  // newCode[2] = '\0';
-  printf("%d", (strlen(newCode)));
+  newCode[(strlen(oldCode))] = codeToAppend;
+  newCode[(strlen(oldCode))+1] = '\0';  
+
   return newCode;
 }
 
@@ -29,7 +27,6 @@ void dictionaryDel(Dictionary *dict){
   int i;
   
   for(i =0 ; i < dict->length ; i++){
-
     if(dict->entries[i].code != NULL)
       free(dict->entries[i].code);
   }
@@ -37,6 +34,14 @@ void dictionaryDel(Dictionary *dict){
   free(dict);
 }
 
-void dictionaryAdd(Dictionary *dict, char *code, int index){
-
+int dictionaryAdd(Dictionary *dict, char *code, int index){
+  int availability =0;
+  
+  if(dict->length > index){
+    dict->entries[index].code = code;
+    availability = 1;
+  }
+    
+  return availability;
 }
+
