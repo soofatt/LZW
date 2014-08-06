@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <malloc.h>
 
-void LZWEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
+// void LZWEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
   
-}
+// }
 
 /*
 * abcdabc

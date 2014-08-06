@@ -1,4 +1,6 @@
 #include "unity.h"
+#include <stdio.h>
+#include <string.h>
 #include "Dictionary.h"
 #include "mock_InStream.h"
 #include "mock_OutStream.h"
@@ -69,12 +71,96 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aa(){
   char *shouldFind = "aa";
   DictionaryEntry *result;
   
-  dictionary->entries[0].code = "a"; 
+  dictionary->length = 4;
+  dictionary->entries[0].code = "ba"; 
   dictionary->entries[1].code = "aa"; 
+  dictionary->entries[2].code = "dc"; 
+  dictionary->entries[3].code = "ab"; 
+  dictionary->entries[0].length = 2; 
+  dictionary->entries[1].length = 2; 
+  dictionary->entries[2].length = 2; 
+  dictionary->entries[3].length = 2; 
+  
+  
   result = dictionaryFindLongestMatchingEntry(shouldFind, dictionary);
  
   TEST_ASSERT_EQUAL_STRING("aa", result->code);
+
+}
+
+void test_dictionaryFindLongestMatchingEntry_find_entry_aaaa(){
+  Dictionary *dictionary = dictionaryNew(4000);
+  char *shouldFind = "aaaa";
+  DictionaryEntry *result;
   
+  dictionary->length = 5;
+  dictionary->entries[0].code = "ba"; 
+  dictionary->entries[1].code = "aa"; 
+  dictionary->entries[2].code = "aba"; 
+  dictionary->entries[3].code = "acb"; 
+  dictionary->entries[4].code = "aaaa"; 
+  dictionary->entries[0].length = 2; 
+  dictionary->entries[1].length = 2; 
+  dictionary->entries[2].length = 3; 
+  dictionary->entries[3].length = 3; 
+  dictionary->entries[4].length = 4; 
+  
+  result = dictionaryFindLongestMatchingEntry(shouldFind, dictionary);
+ 
+  TEST_ASSERT_EQUAL_STRING("aaaa", result->code);
+
+}
+
+void test_dictionaryFindLongestMatchingEntry_find_entry_aaac(){
+  Dictionary *dictionary = dictionaryNew(4000);
+  char *shouldFind = "aaaca";
+  DictionaryEntry *result;
+  
+  dictionary->length = 5;
+  dictionary->entries[0].code = "ba"; 
+  dictionary->entries[1].code = "aa"; 
+  dictionary->entries[2].code = "aca"; 
+  dictionary->entries[3].code = "aaba"; 
+  dictionary->entries[4].code = "aaac"; 
+  
+  dictionary->entries[0].length = 2; 
+  dictionary->entries[1].length = 2; 
+  dictionary->entries[2].length = 3; 
+  dictionary->entries[3].length = 4; 
+  dictionary->entries[4].length = 5; 
+  
+  
+  result = dictionaryFindLongestMatchingEntry(shouldFind, dictionary);
+ 
+  TEST_ASSERT_EQUAL_STRING("aaac", result->code);
+
+}
+
+void test_dictionaryFindLongestMatchingEntry_find_entry_aaacaa(){
+  Dictionary *dictionary = dictionaryNew(4000);
+  char *shouldFind = "aaaca";
+  DictionaryEntry *result;
+  
+  dictionary->length = 6;
+  dictionary->entries[0].code = "ba"; 
+  dictionary->entries[1].code = "aa"; 
+  dictionary->entries[2].code = "aca"; 
+  dictionary->entries[3].code = "aaba"; 
+  dictionary->entries[4].code = "aaaca"; 
+  dictionary->entries[5].code = "aaacab"; 
+  
+  dictionary->entries[0].length = 2; 
+  dictionary->entries[1].length = 2; 
+  dictionary->entries[2].length = 3; 
+  dictionary->entries[3].length = 4; 
+  dictionary->entries[4].length = 5; 
+  dictionary->entries[5].length = 6; 
+  
+  
+  result = dictionaryFindLongestMatchingEntry(shouldFind, dictionary);
+ 
+  TEST_ASSERT_EQUAL_STRING("aaaca", result->code);
+
 }
 
 //try aaaaaaaaa

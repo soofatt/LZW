@@ -46,16 +46,51 @@ int dictionaryAdd(Dictionary *dict, char *code, int index){
 }
 
 DictionaryEntry *dictionaryFindLongestMatchingEntry(char *code, Dictionary *dictionary){
-  int i;
-  DictionaryEntry *dictEntry;
+  Dictionary *dictStack = dictionary;
+  int i, j, numberOfMatches = 0; 
   
-  dictEntry->code = NULL;
+  /*
+  *  big loop    small loop
+  *  abcd |      abcd  
+  *  dcba |      dcba
+  *  cbda |      cbda 
+  *  dacb V      dacb
+  *              --->
+  * 
+  * numberOfMatches: denotes the longest number of character matches in a string, if it's longer than the previous string, save into dictStack
+  *               j: denotes the n-th number of character of the string, the larger the j, the more character matches in the string
+  */
+  
+  for(i = 0 ; dictionary->length > i ; i++){ //to loop through dictionary
 
-  if(strcmp(code[0], dictionary->entries[0].code) == 0){
-    dictionaryFindLongestMatchingEntry(code, dictionary);
-    printf("#feelsad");
+    for(j =0 ; strlen(code) > j; j++){ //to loop through length of code and get it's longest match
+
+      if(code[j] == dictionary->entries[i].code[j]){ //if match found, save the entry into dictStack->entry[0]
+        if(numberOfMatches < j){
+          numberOfMatches = j;
+          dictStack->entries[0] = dictionary->entries[i];
+        }
+      }
+      
+      else if(code[j] != dictionary->entries[i].code[j]){ //if doesnt match break from loop, return to dictionary length loop
+        break;
+      }
+      
+    }
     
-    return dictEntry;
-
   }
+
+  return &dictStack->entries[0];
+  
 }
+
+
+
+
+
+
+
+
+
+
+
