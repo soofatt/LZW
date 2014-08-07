@@ -76,12 +76,7 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aa(){
   dictionary->entries[1].code = "aa"; 
   dictionary->entries[2].code = "dc"; 
   dictionary->entries[3].code = "ab"; 
-  dictionary->entries[0].length = 2; 
-  dictionary->entries[1].length = 2; 
-  dictionary->entries[2].length = 2; 
-  dictionary->entries[3].length = 2; 
-  
-  
+
   result = dictionaryFindLongestMatchingEntry(shouldFind, dictionary);
  
   TEST_ASSERT_EQUAL_STRING("aa", result->code);
@@ -99,11 +94,6 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aaaa(){
   dictionary->entries[2].code = "aba"; 
   dictionary->entries[3].code = "acb"; 
   dictionary->entries[4].code = "aaaa"; 
-  dictionary->entries[0].length = 2; 
-  dictionary->entries[1].length = 2; 
-  dictionary->entries[2].length = 3; 
-  dictionary->entries[3].length = 3; 
-  dictionary->entries[4].length = 4; 
   
   result = dictionaryFindLongestMatchingEntry(shouldFind, dictionary);
  
@@ -123,13 +113,6 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aaac(){
   dictionary->entries[3].code = "aaba"; 
   dictionary->entries[4].code = "aaac"; 
   
-  dictionary->entries[0].length = 2; 
-  dictionary->entries[1].length = 2; 
-  dictionary->entries[2].length = 3; 
-  dictionary->entries[3].length = 4; 
-  dictionary->entries[4].length = 5; 
-  
-  
   result = dictionaryFindLongestMatchingEntry(shouldFind, dictionary);
  
   TEST_ASSERT_EQUAL_STRING("aaac", result->code);
@@ -148,14 +131,6 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aaacaa(){
   dictionary->entries[3].code = "aaba"; 
   dictionary->entries[4].code = "aaaca"; 
   dictionary->entries[5].code = "aaacab"; 
-  
-  dictionary->entries[0].length = 2; 
-  dictionary->entries[1].length = 2; 
-  dictionary->entries[2].length = 3; 
-  dictionary->entries[3].length = 4; 
-  dictionary->entries[4].length = 5; 
-  dictionary->entries[5].length = 6; 
-  
   
   result = dictionaryFindLongestMatchingEntry(shouldFind, dictionary);
  
