@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
+#include "InStream.h"
 
 char *codeNewAndAppend(char *oldCode, char codeToAppend){
   char *newCode = malloc((strlen(oldCode))+ 2);
@@ -45,47 +46,56 @@ int dictionaryAdd(Dictionary *dict, char *code, int index){
   return availability;
 }
 
-DictionaryEntry *dictionaryFindLongestMatchingEntry(char *code, Dictionary *dictionary){
-  Dictionary *dictStack = dictionary;
-  int i, j, numberOfMatches = 0; 
+DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *dictionary){
+  int byte;
+  int index, j = 0, longestCode = 0, markIndex = 0, k = 0;
   
-  /*
-  *  big loop    small loop
-  *  abcd |      abcd  
-  *  dcba |      dcba
-  *  cbda |      cbda 
-  *  dacb V      dacb
-  *              --->
-  * 
-  * numberOfMatches: denotes the longest number of character matches in a string, if it's longer than the previous string, save into dictStack
-  *               j: denotes the n-th number of character of the string, the larger the j, the more character matches in the string
-  */
+  byte = streamReadBits(in, 8);
   
-  for(i = 0 ; dictionary->length > i ; i++){ //to loop through dictionary
+  for(index = 0 ; dictionary->length > index ; index++){ //to loop through dictionary
+    printf("nahhh");
+    if(dictionary->entries[markIndex].code != NULL && dictionary->entries[index].code != NULL){
+      
+      if(isBlockSame(dictionary->entries[markIndex].code, dictionary->entries[index].code, longestCode) == 0){
+        k = longestCode;
+        printf("%d,", longestCode);
+        for(k ; dictionary->entries[index].length > k ; k++){
+          
+          if(byte == dictionary->entries[index].code[k]){
+            markIndex = index;
+            longestCode = k;
+          }  
+          
+          else if(byte != dictionary->entries[index].code[k]){
+            
+            break;
+          }
+          
+          byte = streamReadBits(in, 8);
 
-    for(j =0 ; strlen(code) > j; j++){ //to loop through length of code and get it's longest match
-
-      if(code[j] == dictionary->entries[i].code[j]){ //if match found, save the entry into dictStack->entry[0]
-        if(numberOfMatches < j){
-          numberOfMatches = j;
-          dictStack->entries[0] = dictionary->entries[i];
         }
       }
-      
-      else if(code[j] != dictionary->entries[i].code[j]){ //if doesnt match break from loop, return to dictionary length loop
-        break;
-      }
-      
+    }
+  }
+  return &dictionary->entries[markIndex];
+}
+
+int isBlockSame(char *source, char *source2, int byteSize){
+  int i, result=0;
+  
+  for(i = 0 ; byteSize >= i ; i++){
+  
+    if(source[i] == source2[i]){
+    }
+    else{
+      result = 1;
+      break;
     }
     
   }
 
-  return &dictStack->entries[0];
-  
+  return result;
 }
-
-
-
 
 
 

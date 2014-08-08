@@ -1,6 +1,6 @@
 #ifndef InStream_H
 #define InStream_H
-
+#include <stdio.h>
 typedef struct InStream{
   FILE *file;
   char *filename;
