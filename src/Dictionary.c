@@ -47,27 +47,29 @@ int dictionaryAdd(Dictionary *dict, char *code, int index){
 }
 
 DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *dictionary){
-  int byte;
-  int index, j = 0, longestCode = 0, markIndex = 0, k = 0;
+  int byte, firstByte;
+  int index, markIndex, longestCode = 0, k = 0;
   
   byte = streamReadBits(in, 8);
+  firstByte = byte;
+  
+  markIndex = firstMarkIndex(dictionary, firstByte);
   
   for(index = 0 ; dictionary->length > index ; index++){ //to loop through dictionary
-    printf("nahhh");
+   
     if(dictionary->entries[markIndex].code != NULL && dictionary->entries[index].code != NULL){
-      
+
       if(isBlockSame(dictionary->entries[markIndex].code, dictionary->entries[index].code, longestCode) == 0){
-        k = longestCode;
-        printf("%d,", longestCode);
+        
         for(k ; dictionary->entries[index].length > k ; k++){
-          
+
           if(byte == dictionary->entries[index].code[k]){
             markIndex = index;
             longestCode = k;
           }  
           
           else if(byte != dictionary->entries[index].code[k]){
-            
+           
             break;
           }
           
@@ -75,14 +77,15 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
 
         }
       }
+    
     }
   }
+
   return &dictionary->entries[markIndex];
 }
 
 int isBlockSame(char *source, char *source2, int byteSize){
   int i, result=0;
-  
   for(i = 0 ; byteSize >= i ; i++){
   
     if(source[i] == source2[i]){
@@ -97,7 +100,15 @@ int isBlockSame(char *source, char *source2, int byteSize){
   return result;
 }
 
+int firstMarkIndex(Dictionary *dictionary, int byte){
+  int i;
+  
+  for(i = 0 ; dictionary->length > i ; i++){
+    if(byte == dictionary->entries[i].code[0])
+      return i;
+  }
 
+}
 
 
 

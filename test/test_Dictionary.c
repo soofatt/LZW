@@ -93,6 +93,35 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_abc(){
 
 }
 
+void test_dictionaryFindLongestMatchingEntry_find_entry_def(){
+
+  Dictionary *dictionary = dictionaryNew(4000);
+  DictionaryEntry *result;
+  
+  InStream *in;
+  dictionary->entries[0].code = "ab"; 
+  dictionary->entries[1].code = "bc"; 
+  dictionary->entries[2].code = "cd"; 
+  dictionary->entries[3].code = "da"; 
+  dictionary->entries[4].code = "de"; 
+  
+  dictionary->entries[0].length = 2; 
+  dictionary->entries[1].length = 2; 
+  dictionary->entries[2].length = 2; 
+  dictionary->entries[3].length = 2; 
+  dictionary->entries[4].length = 2; 
+  
+  streamReadBits_ExpectAndReturn(in, 8, 100);
+  streamReadBits_ExpectAndReturn(in, 8, 101);
+  streamReadBits_ExpectAndReturn(in, 8, 102);
+  
+  result = dictionaryFindLongestMatchingEntry(in, dictionary);
+  
+  TEST_ASSERT_EQUAL_STRING("de", result->code);
+
+
+}
+
 void test_dictionaryFindLongestMatchingEntry_find_entry_aaac(){
 
   Dictionary *dictionary = dictionaryNew(4000);
@@ -132,7 +161,7 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aacaad(){
   dictionary->entries[5].code = "aacaae";
   dictionary->entries[6].code = "aacaad";
   dictionary->entries[7].code = "aacaade";
-  dictionary->entries[8].code = "aacaada";
+  dictionary->entries[8].code = "aacaadf";
   
   dictionary->entries[0].length = 2; 
   dictionary->entries[1].length = 2; 
@@ -143,7 +172,6 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aacaad(){
   dictionary->entries[6].length = 6; 
   dictionary->entries[7].length = 7; 
   dictionary->entries[8].length = 7; 
-  
   
   streamReadBits_ExpectAndReturn(in, 8, 97);
   streamReadBits_ExpectAndReturn(in, 8, 97);
