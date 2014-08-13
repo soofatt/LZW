@@ -1,4 +1,5 @@
 #include "LZWEncoder.h"
+#include "CException.h"
 #include "unity.h"
 #include "mock_InStream.h"
 #include "mock_OutStream.h"
@@ -7,10 +8,10 @@
 void setUp(){}
 void tearDown(){}
 
-void test_LZWEncoder_try(){
-
-  OutStream *out;
-  InStream *in;
+void test_lzwEncoder_try(){
+  CEXCEPTION_T e;
+  OutStream out;
+  InStream in;
   Dictionary *dictionary = dictionaryNew(4000);
   
   dictionary->entries[0].code = "a";
@@ -22,26 +23,33 @@ void test_LZWEncoder_try(){
   dictionary->entries[2].length = 1;
   
   
-  streamReadBits_ExpectAndReturn(in, 8, 98);
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamWriteBits_Expect(out, 98, 8);
-  streamReadBits_ExpectAndReturn(in, 8, 110);
-  streamWriteBits_Expect(out, 97, 8);
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamWriteBits_Expect(out, 110, 8);
-  streamReadBits_ExpectAndReturn(in, 8, 110);
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamWriteBits_Expect(out, 256, 8);
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamWriteBits_Expect(out, 97, 8);
-  streamReadBits_ExpectAndReturn(in, 0, 0);
+  streamReadBits_ExpectAndReturn(&in, 8, 98);
+  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamWriteBits_Expect(&out, 98, 8);
+  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamReadBits_ExpectAndReturn(&in, 8, 110);
+  streamReadBits_ExpectAndReturn(&in, 8, 110);
+  streamWriteBits_Expect(&out, 97, 8);
+  streamReadBits_ExpectAndReturn(&in, 8, 110);
+  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamWriteBits_Expect(&out, 110, 8);
+  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamReadBits_ExpectAndReturn(&in, 8, 110);
+  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamWriteBits_Expect(&out, 257, 8);
+  streamWriteBits_Expect(&out, 97, 8);
+  streamReadBits_ExpectAndThrow(&in, 8, -1);
+  // streamReadBits_ExpectAndReturn(&in, 0, 0);
   
-  
-  LZWEncoder(in, dictionary, out);
-
-  TEST_ASSERT_EQUAL_STRING("an", dictionary->entries[0].code);
+  Try{
+    lzwEncoder(&in, dictionary, &out);
+  }Catch(e){
+    TEST_ASSERT_EQUAL_STRING("an", dictionary->entries[256].code);
+  }
 }
-
 
 
 

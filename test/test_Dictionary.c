@@ -43,9 +43,10 @@ void test_codeNewAndAppend_ban_to_bana(){
 void test_dictionaryAdd_should_add_ab(){
   Dictionary *dictionary = dictionaryNew(4000);
   char *shouldAdd = "ab";
-  int index = 1;
+  int index = 0;
   
   TEST_ASSERT_EQUAL(1, dictionaryAdd(dictionary, shouldAdd, index));
+  TEST_ASSERT_EQUAL_STRING("ab", dictionary->entries[0].code);
 }
 
 void test_dictionaryAdd_should_add_aba(){
@@ -231,6 +232,15 @@ void test_isBlockSame_compare_aaaca_with_aaa(){
   int byteSize = 5;
   
   TEST_ASSERT_EQUAL(1, isBlockSame(source1, source2, byteSize));
+
+}
+
+void test_isBlockSame_compare_symbol_with_symbol(){
+  char *source1 = "&";
+  char *source2 = "&";
+  int byteSize = 1;
+  
+  TEST_ASSERT_EQUAL(0, isBlockSame(source1, source2, byteSize));
 
 }
 

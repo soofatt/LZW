@@ -1,8 +1,11 @@
 #include "Dictionary.h"
+#include "CException.h"
+#include "LZWEncoder.h"
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
 #include "InStream.h"
+#include "OutStream.h"
 
 char *codeNewAndAppend(char *oldCode, char codeToAppend){
   char *newCode = malloc((strlen(oldCode))+ 2);
@@ -37,9 +40,11 @@ void dictionaryDel(Dictionary *dict){
 
 int dictionaryAdd(Dictionary *dict, char *code, int index){
   int availability =0;
-  
+    
   if(dict->length > index){
+    
     dict->entries[index].code = code;
+    dict->entries[index].length = strlen(code);
     availability = 1;
   }
     
@@ -49,6 +54,7 @@ int dictionaryAdd(Dictionary *dict, char *code, int index){
 DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *dictionary){
   int byte, firstByte;
   int index, markIndex, longestCode = 0, k = 0;
+  OutStream *out;
   
   byte = streamReadBits(in, 8);
   firstByte = byte;
@@ -77,7 +83,6 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
 
         }
       }
-    
     }
   }
 
@@ -86,6 +91,7 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
 
 int isBlockSame(char *source, char *source2, int byteSize){
   int i, result=0;
+
   for(i = 0 ; byteSize >= i ; i++){
   
     if(source[i] == source2[i]){
@@ -94,7 +100,6 @@ int isBlockSame(char *source, char *source2, int byteSize){
       result = 1;
       break;
     }
-    
   }
 
   return result;
@@ -102,15 +107,15 @@ int isBlockSame(char *source, char *source2, int byteSize){
 
 int firstMarkIndex(Dictionary *dictionary, int byte){
   int i;
-  
+
   for(i = 0 ; dictionary->length > i ; i++){
+
     if(byte == dictionary->entries[i].code[0])
       return i;
+
   }
 
 }
-
-
 
 
 

@@ -1,28 +1,41 @@
-#include "LZWEncoder.h"
-#include <string.h>
-#include "Dictionary.h"
-#include <stdio.h>
-#include <malloc.h>
 #include "InStream.h"
 #include "OutStream.h"
+#include "Dictionary.h"
+#include "LZWEncoder.h"
+#include <string.h>
+#include <stdio.h>
+#include <malloc.h>
 
-void LZWEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
-  int i, byte;
+void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
+  int i, dictIndex = 256, k;
+  char *code;
   
-  for(i = 1 ; i < 10 ; i++){
+  
+  for(i = 0 ; i < 10 ; i++){
     
+    code = dictionaryFindLongestMatchingEntry(in, dictionary)->code;
+    dictionaryAdd(dictionary, codeNewAndAppend(code, streamReadBits(in, 8)), dictIndex);
+    dictIndex++;
+    streamWriteBits(out, getIntFromChar(dictionary, code), 8);
     
-    if(dictionaryFindLongestMatchingEntry(in, dictionary)->code == dictionary->entries[i].code){
-    
-    }
-    
-    else if(dictionaryAdd(dictionary, dictionaryFindLongestMatchingEntry(in, dictionary)->code, i) == 1){
-      streamWriteBits(out, (int)dictionary->entries[i].code ,8);
-    }
-    else
-      codeNewAndAppend(dictionary->entries[i].code, byte);
-
   }
+}
+
+int getIntFromChar(Dictionary *dict, char *code){
+  int byte, i;
+  if(strlen(code) == 1){
+    byte = code[0];
+    return byte;
+  }
+  else
+    for(i = 256 ; dict->length > i ; i++){
+      if(strcmp(code, dict->entries[i].code) == 0){
+        return i;
+      
+      }
+      
+    
+    }
 }
 
 /*
