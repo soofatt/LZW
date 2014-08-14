@@ -5,7 +5,8 @@
 #include "Dictionary.h"
 
 typedef enum{
-  END
+  END,
+  NO_ENTRY
 } ErrorCode;
 
 void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out);

@@ -22,7 +22,6 @@ void test_lzwEncoder_try(){
   dictionary->entries[1].length = 1;
   dictionary->entries[2].length = 1;
   
-  
   streamReadBits_ExpectAndReturn(&in, 8, 98);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
@@ -40,14 +39,18 @@ void test_lzwEncoder_try(){
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamWriteBits_Expect(&out, 257, 8);
+  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamReadBits_ExpectAndReturn(&in, 8, -1);
+  streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamWriteBits_Expect(&out, 97, 8);
   streamReadBits_ExpectAndThrow(&in, 8, -1);
-  // streamReadBits_ExpectAndReturn(&in, 0, 0);
   
   Try{
     lzwEncoder(&in, dictionary, &out);
   }Catch(e){
-    TEST_ASSERT_EQUAL_STRING("an", dictionary->entries[256].code);
+    TEST_ASSERT_EQUAL_STRING("ba", dictionary->entries[256].code);
+    TEST_ASSERT_EQUAL_STRING("an", dictionary->entries[257].code);
+    TEST_ASSERT_EQUAL_STRING("na", dictionary->entries[258].code); 
   }
 }
 

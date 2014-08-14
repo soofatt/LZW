@@ -10,7 +10,6 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
   int i, dictIndex = 256, k;
   char *code;
   
-  
   for(i = 0 ; i < 10 ; i++){
     
     code = dictionaryFindLongestMatchingEntry(in, dictionary)->code;
@@ -21,6 +20,11 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
   }
 }
 
+/*
+* to obtain an integer from character and to locate strings from dictionary entry to return it's index
+* return ASCII in integer form
+* return an index of a dictionary entry
+*/
 int getIntFromChar(Dictionary *dict, char *code){
   int byte, i;
   if(strlen(code) == 1){
@@ -33,13 +37,5 @@ int getIntFromChar(Dictionary *dict, char *code){
         return i;
       
       }
-      
-    
     }
 }
-
-/*
-* abcdabc
-* aaaaaaa
-*
-*/
