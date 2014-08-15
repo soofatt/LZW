@@ -7,7 +7,7 @@
 #include <malloc.h>
 
 void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
-  int i, dictIndex = 256, k;
+  int i, dictIndex = 256, bitsToWrite = 8, marker = 256;
   char *code;
   
   dictionaryEntryInitializer(dictionary);
@@ -17,8 +17,15 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
     code = dictionaryFindLongestMatchingEntry(in, dictionary)->code;
 
     if(dictionaryAdd(dictionary, codeNewAndAppend(code, streamReadBits(in, 8)), dictIndex) == 1){
+      streamWriteBits(out, getIntFromChar(dictionary, code), bitsToWrite);
+      
+      //condition to add bitsToWrite
+      if(dictIndex == marker){ 
+        marker = marker * 2;
+        bitsToWrite++;
+      }
+      
       dictIndex++;
-      streamWriteBits(out, getIntFromChar(dictionary, code), 8);
     }
   }
 }
@@ -42,4 +49,3 @@ int getIntFromChar(Dictionary *dict, char *code){
       }
     }
 }
-

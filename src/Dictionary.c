@@ -1,6 +1,7 @@
 #include "Dictionary.h"
 #include "CException.h"
 #include "LZWEncoder.h"
+#include "ErrorCode.h"
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
@@ -129,8 +130,9 @@ int firstMarkIndex(Dictionary *dictionary, int byte){
 
     if(byte == dictionary->entries[i].code[0])
       return i;
-
   }
+ 
+  Throw(NO_ENTRY);
 
 }
 
