@@ -10,13 +10,16 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
   int i, dictIndex = 256, k;
   char *code;
   
-  for(i = 0 ; i < 10 ; i++){
-    
+  dictionaryEntryInitializer(dictionary);
+  
+  for(i = 0 ; ; i++){
+  
     code = dictionaryFindLongestMatchingEntry(in, dictionary)->code;
-    dictionaryAdd(dictionary, codeNewAndAppend(code, streamReadBits(in, 8)), dictIndex);
-    dictIndex++;
-    streamWriteBits(out, getIntFromChar(dictionary, code), 8);
-    
+
+    if(dictionaryAdd(dictionary, codeNewAndAppend(code, streamReadBits(in, 8)), dictIndex) == 1){
+      dictIndex++;
+      streamWriteBits(out, getIntFromChar(dictionary, code), 8);
+    }
   }
 }
 
@@ -31,11 +34,12 @@ int getIntFromChar(Dictionary *dict, char *code){
     byte = code[0];
     return byte;
   }
+  
   else
     for(i = 256 ; dict->length > i ; i++){
       if(strcmp(code, dict->entries[i].code) == 0){
         return i;
-      
       }
     }
 }
+

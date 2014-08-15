@@ -8,15 +8,7 @@
 void setUp(){}
 void tearDown(){}
 
-void test_dictionaryNew_add_new_dict(){
-  int newLength;
-  Dictionary *dictionary;
-  
-  dictionary = dictionaryNew(4000);
-
-  TEST_ASSERT_NULL(dictionary->entries[6].code);
-}
-
+//codeNewAndAppend test//
 void test_codeNewAndAppend_b_to_ba(){
   Dictionary *dictionary = dictionaryNew(40);
   char shouldAdd = 'a'; 
@@ -40,6 +32,17 @@ void test_codeNewAndAppend_ban_to_bana(){
   TEST_ASSERT_EQUAL_STRING("bana",codeNewAndAppend("ban", shouldAdd));
 }
 
+//dictionaryNew test//
+void test_dictionaryNew_add_new_dict(){
+  int newLength;
+  Dictionary *dictionary;
+  
+  dictionary = dictionaryNew(4000);
+
+  TEST_ASSERT_NULL(dictionary->entries[6].code);
+}
+
+//dictionaryAdd test//
 void test_dictionaryAdd_should_add_ab(){
   Dictionary *dictionary = dictionaryNew(4000);
   char *shouldAdd = "ab";
@@ -67,6 +70,7 @@ void test_dictionaryAdd_exceed_length_should_return_0(){
   TEST_ASSERT_EQUAL(0, dictionaryAdd(dictionary, shouldAdd, index));
 }
 
+//dictionaryFindLongestMatchingentry test//
 void test_dictionaryFindLongestMatchingEntry_find_entry_abc(){
 
   Dictionary *dictionary = dictionaryNew(4000);
@@ -190,6 +194,7 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aacaad(){
 
 }
 
+//isBlockSame test//
 void test_isBlockSame_compare_aa(){
   char *source1 = "aa";
   char *source2 = "aa";
@@ -244,5 +249,56 @@ void test_isBlockSame_compare_symbol_with_symbol(){
 
 }
 
+//firstMarkIndex test//
+void test_firstMarkIndex_find_index_3(){
+  Dictionary *dictionary = dictionaryNew(4000);
+  int byte = 97;
+  
+  dictionary->entries[0].code = "ba";
+  dictionary->entries[1].code = "na";
+  dictionary->entries[2].code = "gas";
+  dictionary->entries[3].code = "aaa";
+  
+  TEST_ASSERT_EQUAL(3, firstMarkIndex(dictionary, byte));
 
+}
 
+void test_firstMarkIndex_find_index_0(){
+  Dictionary *dictionary = dictionaryNew(4000);
+  int byte = 97;
+  
+  dictionary->entries[0].code = "aa";
+  dictionary->entries[1].code = "na";
+  dictionary->entries[2].code = "gas";
+  dictionary->entries[3].code = "ha";
+  
+  TEST_ASSERT_EQUAL(0, firstMarkIndex(dictionary, byte));
+
+}
+
+void test_firstMarkIndex_find_index_symbol_2(){
+  Dictionary *dictionary = dictionaryNew(4000);
+  int byte = 95;
+  
+  dictionary->entries[0].code = "aa";
+  dictionary->entries[1].code = "na";
+  dictionary->entries[2].code = "_as";
+  dictionary->entries[3].code = "ha";
+  
+  TEST_ASSERT_EQUAL(2, firstMarkIndex(dictionary, byte));
+
+}
+
+//dictionaryEntryInitializer test//
+void test_dictionaryEntryInitializer_initialize_ASCII(){
+  Dictionary *dictionary = dictionaryNew(4000);
+
+  dictionaryEntryInitializer(dictionary);
+
+  TEST_ASSERT_EQUAL('a', dictionary->entries[97].code[0]);
+  TEST_ASSERT_EQUAL('b', dictionary->entries[98].code[0]);
+  TEST_ASSERT_EQUAL('c', dictionary->entries[99].code[0]);
+  TEST_ASSERT_EQUAL('d', dictionary->entries[100].code[0]);
+  TEST_ASSERT_EQUAL('_', dictionary->entries[95].code[0]);
+
+}

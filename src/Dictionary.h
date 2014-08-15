@@ -9,6 +9,7 @@ typedef struct{
 typedef struct{
   DictionaryEntry *entries;
   int length;
+  int size; // unused, for soofatt
 }Dictionary;
 
 char *codeNewAndAppend(char *oldCode, char codeToAppend);
@@ -17,4 +18,5 @@ void dictionaryDel(Dictionary *dict);
 int dictionaryAdd(Dictionary *dict, char *code, int index);
 DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *dictionary);
 int firstMarkIndex(Dictionary *dictionary, int byte);
+void dictionaryEntryInitializer(Dictionary *dictionary);
 #endif // Dictionary_H
