@@ -37,7 +37,8 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
 */
 int getIntFromChar(Dictionary *dict, char *code){
   int byte, i;
-  if(strlen(code) == 1){
+ 
+ if(strlen(code) == 1){
     byte = code[0];
     return byte;
   }

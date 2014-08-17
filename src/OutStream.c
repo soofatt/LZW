@@ -4,6 +4,8 @@
 #include "ErrorCode.h"
 #include <malloc.h>
 
+int temp = 0;
+
 OutStream *openOutStream(char *fileName, char *openMethod){
   OutStream *outStream = calloc(1, sizeof(OutStream));
 
@@ -16,15 +18,25 @@ OutStream *openOutStream(char *fileName, char *openMethod){
 }
 
 void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
-  int i,temp = 0, bit =0;
-  
+  int i, loop, bit =0, carryOver;
   
   temp = bitsToWrite;
-  for(i = 7 ; i > -1 ; i--){
+  carryOver = bitSize - 8;
+  temp = bitsToWrite >> carryOver;
+  
+  out->currentbyte = out->currentbyte | temp;
+  
+  for(i = 0 ; i < 8 ; i++){
+    out->bitIndex++;
     bit = bit << 1;
-    bit = bit | ((temp >> i)&0x01);
+    bit = bit | ((out->currentbyte >> 7-i)&0x01);
     
+    if(out->bitIndex == 7)
+      out->bitIndex = 0;
   }
+  
+  out->currentbyte = bitsToWrite << (8-carryOver);
+ 
   fputc(bit, out->file);
 
 }
@@ -33,3 +45,6 @@ void closeOutStream(OutStream *out){
   fclose(out->file);
 
 }
+
+
+

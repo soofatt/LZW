@@ -78,7 +78,7 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
           /*
           * compare if current byte is the same with byte in entry, if it's the same mark current index as longest and code
           * if it's not the same return to entry
-          * destroy: longest code & index
+          * destroy: longest code & mark index
           */
           if(byte == dictionary->entries[index].code[k]){
             markIndex = index;
@@ -104,9 +104,10 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
   return &dictionary->entries[markIndex];
 }
 
+//to compare source and source2, if both are the same return 0, otherwise return 1
 int isBlockSame(char *source, char *source2, int byteSize){
-  int i, result=0;
-
+  int i, result = 0;
+  
   for(i = 0 ; byteSize >= i ; i++){
 
     if(source[i] == source2[i]){
@@ -116,23 +117,29 @@ int isBlockSame(char *source, char *source2, int byteSize){
       break;
     }
   }
+  
   return result;
 }
 
 /*
 * to find the first entry for the code to start
+*
+* note: this function will cause bad memory if dictionary->entries[i].code[0] were to access an empty entry but this function
+*       will not access an empty entry because dictionaryEntryInitializer will initialize all 255 entries with ASCII characters
+*       and this function will only be called by dictionaryFindLongestMatchingEntry which will provide the value for the
+*       "byte" parameter, which must be an ASCII character  
+*
 * return starting entry
 */
 int firstMarkIndex(Dictionary *dictionary, int byte){
   int i;
 
-  for(i = 0 ; dictionary->length > i ; i++){
+  for(i = 0 ; i < 256 ; i++){
 
     if(byte == dictionary->entries[i].code[0])
       return i;
+      
   }
- 
-  Throw(NO_ENTRY);
 
 }
 

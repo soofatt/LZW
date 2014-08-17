@@ -4,9 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "Dictionary.h"
-#include "mock_InStream.h"
-#include "mock_OutStream.h"
-
+#include "InStream.h"
 void setUp(){}
 void tearDown(){}
 
@@ -89,9 +87,7 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_abc(){
   dictionary->entries[2].length = 2; 
   dictionary->entries[3].length = 2; 
   
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamReadBits_ExpectAndReturn(in, 8, 98);
-  streamReadBits_ExpectAndReturn(in, 8, 99);
+  in = openInStream("abc.txt", "r");
   
   result = dictionaryFindLongestMatchingEntry(in, dictionary);
   
@@ -118,9 +114,7 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_def(){
   dictionary->entries[3].length = 2; 
   dictionary->entries[4].length = 2; 
   
-  streamReadBits_ExpectAndReturn(in, 8, 100);
-  streamReadBits_ExpectAndReturn(in, 8, 101);
-  streamReadBits_ExpectAndReturn(in, 8, 102);
+  in = openInStream("test_def.txt", "r");
   
   result = dictionaryFindLongestMatchingEntry(in, dictionary);
   
@@ -141,11 +135,7 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aaac(){
   dictionary->entries[0].length = 2; 
   dictionary->entries[1].length = 3; 
   
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamReadBits_ExpectAndReturn(in, 8, 99);
-  
+  in = openInStream("test_aaac.txt", "r");
   
   result = dictionaryFindLongestMatchingEntry(in, dictionary);
   
@@ -180,13 +170,7 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aacaad(){
   dictionary->entries[7].length = 7; 
   dictionary->entries[8].length = 7; 
   
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamReadBits_ExpectAndReturn(in, 8, 99);
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamReadBits_ExpectAndReturn(in, 8, 97);
-  streamReadBits_ExpectAndReturn(in, 8, 100);
-  streamReadBits_ExpectAndReturn(in, 8, 97);
+  in = openInStream("test_aacaad.txt", "r");
   
   result = dictionaryFindLongestMatchingEntry(in, dictionary);
   

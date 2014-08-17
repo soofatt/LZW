@@ -6,7 +6,7 @@
 void setUp(void){}
 void tearDown(void){}
 
-void test_openInStream_throw_no_file_found(void){
+void test_openInStream_throw_no_file_found(){
 	CEXCEPTION_T e;
   InStream *in;
   
@@ -17,7 +17,7 @@ void test_openInStream_throw_no_file_found(void){
   }
 }
 
-void test_streamReadBits_read_test_txt(void){
+void test_streamReadBits_read_test_txt(){
 	CEXCEPTION_T e;
   InStream *in;
   int result;
@@ -34,6 +34,24 @@ void test_streamReadBits_read_test_txt(void){
   
 }
 
+void test_streamReadBits_read_test2_txt(){
+	CEXCEPTION_T e;
+  InStream *in;
+  int result;
+  
+  Try{
+    in = openInStream("test2.txt", "r");
+  }Catch(e){
+    TEST_ASSERT_EQUAL(1, e);
+  }
+  
+  result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL(98, result);
+  result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL(97, result);
+  closeInStream(in);
+  
+}
 
 void test_streamReadBit_read_1_from_0xff(){
   int result, byte;
