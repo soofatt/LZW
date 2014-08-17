@@ -9,7 +9,7 @@ typedef struct InStream{
   uint8 currentbyte;
   // uint8 length;
   // uint32 size;
-  // uint32 byteIndex;
+  uint32 byteIndex;
   uint32 bitIndex;
 }InStream;
 

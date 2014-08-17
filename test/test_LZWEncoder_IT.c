@@ -1,37 +1,28 @@
+#include "unity.h"
 #include "LZWEncoder.h"
 #include "CException.h"
-#include "unity.h"
-#include "mock_InStream.h"
-#include "mock_OutStream.h"
+#include "InStream.h"
+#include "OutStream.h"
 #include "Dictionary.h"
+#include <stdio.h>
 
 void setUp(){}
 void tearDown(){}
 
-//lzwEncoder test//
+// lzwEncoder test//
 void test_lzwEncoder_encode_banana(){
   CEXCEPTION_T e;
-  OutStream out;
-  InStream in;
+  OutStream *out;
+  InStream *in;
   Dictionary *dictionary = dictionaryNew(4000);
-  
-  streamReadBits_ExpectAndReturn(&in, 8, 98);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 98, 8);
-  streamReadBits_ExpectAndReturn(&in, 8, 110);
-  streamWriteBits_Expect(&out, 97, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 110, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 110);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 257, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, -1);
-  streamWriteBits_Expect(&out, 97, 9);
-  streamReadBits_ExpectAndThrow(&in, 8, -1);
+
+  in = openInStream("banana.txt", "r");
+  out = openOutStream("banana_enc.txt", "w");
   
   Try{
-    lzwEncoder(&in, dictionary, &out);
+    lzwEncoder(in, dictionary, out);
   }Catch(e){
+    TEST_ASSERT_EQUAL(2, e);
     TEST_ASSERT_EQUAL_STRING("ba", dictionary->entries[256].code);
     TEST_ASSERT_EQUAL_STRING("an", dictionary->entries[257].code);
     TEST_ASSERT_EQUAL_STRING("na", dictionary->entries[258].code); 
@@ -41,24 +32,15 @@ void test_lzwEncoder_encode_banana(){
 
 void test_lzwEncoder_encode_aaaaaa(){
   CEXCEPTION_T e;
-  OutStream out;
-  InStream in;
+  OutStream *out;
+  InStream *in;
   Dictionary *dictionary = dictionaryNew(4000);
-
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 256, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamReadBits_ExpectAndReturn(&in, 8, -1);
-  streamWriteBits_Expect(&out, 257, 9);
-  streamReadBits_ExpectAndThrow(&in, 8, -1);
+  
+  in = openInStream("aaaaaa.txt", "r");
+  out = openOutStream("aaaaaa_enc.txt", "w");
   
   Try{
-    lzwEncoder(&in, dictionary, &out);
+    lzwEncoder(in, dictionary, out);
   }Catch(e){
     TEST_ASSERT_EQUAL_STRING("aa", dictionary->entries[256].code);
     TEST_ASSERT_EQUAL_STRING("aaa", dictionary->entries[257].code);
@@ -67,37 +49,15 @@ void test_lzwEncoder_encode_aaaaaa(){
 
 void test_lzwEncoder_encode_banana_nanaba(){
   CEXCEPTION_T e;
-  OutStream out;
-  InStream in;
+  OutStream *out;
+  InStream *in;
   Dictionary *dictionary = dictionaryNew(4000);
 
-  streamReadBits_ExpectAndReturn(&in, 8, 98);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 98, 8);
-  streamReadBits_ExpectAndReturn(&in, 8, 110);
-  streamWriteBits_Expect(&out, 97, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 110, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 110);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 257, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 95);
-  streamWriteBits_Expect(&out, 97, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 110);  
-  streamWriteBits_Expect(&out, 95, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamReadBits_ExpectAndReturn(&in, 8, 110);
-  streamWriteBits_Expect(&out, 258, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamReadBits_ExpectAndReturn(&in, 8, 98);
-  streamWriteBits_Expect(&out, 258, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamReadBits_ExpectAndReturn(&in, 8, -1);
-  streamWriteBits_Expect(&out, 256, 9);
-  streamReadBits_ExpectAndThrow(&in, 8, -1);
+  in = openInStream("banana_nanaba.txt", "r");
+  out = openOutStream("banana_nanaba_enc.txt", "w");
   
   Try{
-    lzwEncoder(&in, dictionary, &out);
+    lzwEncoder(in, dictionary, out);
   }Catch(e){
     TEST_ASSERT_EQUAL_STRING("ba", dictionary->entries[256].code);
     TEST_ASSERT_EQUAL_STRING("an", dictionary->entries[257].code);
@@ -110,7 +70,7 @@ void test_lzwEncoder_encode_banana_nanaba(){
   }
 }
 
-//getIntFromChar test//
+// getIntFromChar test//
 void test_getIntFromChar_get_97(){
   Dictionary *dictionary = dictionaryNew(4000);
   char *code = "a";

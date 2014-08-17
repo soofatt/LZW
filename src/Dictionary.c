@@ -1,12 +1,19 @@
 #include "Dictionary.h"
 #include "CException.h"
 #include "LZWEncoder.h"
-#include "ErrorCode.h"
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
 #include "InStream.h"
 
+/*
+* to append a character to a string or another character
+* 
+* input : -     oldCode: old string or character
+*         -codeToAppend: the character to be appended
+*
+* output: -newCode: the new string
+*/
 char *codeNewAndAppend(char *oldCode, char codeToAppend){
   char *newCode = malloc((strlen(oldCode))+ 2);
 
@@ -17,6 +24,13 @@ char *codeNewAndAppend(char *oldCode, char codeToAppend){
   return newCode;
 }
 
+/*
+* new dictionary
+*
+* input : -length: dictionary length
+*
+* output: -dictionary: the dictionary
+*/
 Dictionary *dictionaryNew(int length){
   Dictionary *dictionary;
 
@@ -27,6 +41,11 @@ Dictionary *dictionaryNew(int length){
   return dictionary;
 }
 
+/*
+* delete dictionary
+* 
+* input : -dict: the dictionary
+*/
 void dictionaryDel(Dictionary *dict){
   int i;
 
@@ -38,6 +57,15 @@ void dictionaryDel(Dictionary *dict){
   free(dict);
 }
 
+/*
+* add new dictionary entry
+* 
+* input : - dict: the dictionary
+*       : - code: the code to add
+*       : -index: the dictionary index where the code is supposed to be saved at
+*
+* output: -availability: 1 if successful, 0 if failed
+*/
 int dictionaryAdd(Dictionary *dict, char *code, int index){
   int availability =0;
 
@@ -50,34 +78,50 @@ int dictionaryAdd(Dictionary *dict, char *code, int index){
   return availability;
 }
 
+/*
+* to find the longest matching dictionary entry
+*
+* input : -        in: the input from file
+*         -dictionary: the dictionary
+*
+* output: -&dictionary->entries[markIndex]: the longest matching entry
+*/
 DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *dictionary){
-  int byte, firstByte, end;
-  int index, markIndex, longestCode = 0, k = 0;
-
+  int byte, index, markIndex, longestCode = 0, k = 0;
+  
   /*
-  * take in the first byte
-  * save the first byte into firstByte
-  * firstMarkIndex is to find the first entry for the dictionaryFindLongestMatchingEntry to start
-  * destroy: markIndex
+  * check if in->currentbyte is 0
+  *  0: byte will get value from file
+  * !0: byte will get value from in->currentbyte
+  * 
+  * firstMarkIndex will locate the first dictionary index that matches byte
   */
-  byte = streamReadBits(in, 8);
-  firstByte = byte;
-  markIndex = firstMarkIndex(dictionary, firstByte);
-
+  if(in->currentbyte == 0)
+    byte = streamReadBits(in, 8);
+  else
+    byte = in->currentbyte;
+    
+  markIndex = firstMarkIndex(dictionary, byte);
+  
   //to loop through dictionary
   for(index = 0 ; dictionary->length > index ; index++){
 
     //ensure code is not null
     if(dictionary->entries[markIndex].code != NULL && dictionary->entries[index].code != NULL){
 
-      //compare if marked code and current code is the same, if not go to the next entry
+      /* 
+      * compare if marked code and current code is the same, if not go to the next entry
+      * longestCode will determine how many characters markIndex and index should compare
+      */
       if(isBlockSame(dictionary->entries[markIndex].code, dictionary->entries[index].code, longestCode) == 0){
 
         for(k ; dictionary->entries[index].length > k ; k++){
 
           /*
-          * compare if current byte is the same with byte in entry, if it's the same mark current index as longest and code
-          * if it's not the same return to entry
+          * compare if current byte is the same with byte in entry
+          *     same: mark current index and mark code as longest
+          * not same: return to entry
+          *
           * destroy: longest code & mark index
           */
           if(byte == dictionary->entries[index].code[k]){
@@ -85,26 +129,35 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
             longestCode = k;
           }
 
-          else if(byte != dictionary->entries[index].code[k]){
-
+          else if(byte != dictionary->entries[index].code[k])
             break;
-          }
-
+          
+          //after marking longest index, read a byte
           byte = streamReadBits(in, 8);
-
-          //ending marker
-          if(byte == -1){
-            break;
-          }
+          
+          //if byte is -1, end
+          if(byte == -1)
+            return &dictionary->entries[markIndex];
+          
+          //save byte in in->currentbyte
+          in->currentbyte = byte;
         }
       }
     }
   }
-
+  
   return &dictionary->entries[markIndex];
 }
 
-//to compare source and source2, if both are the same return 0, otherwise return 1
+/*
+* to compare source and source2
+*
+* input : -  source: the first source for comparison 
+*         - source2: the second source for comparison
+*         -byteSize: the amount of bits that source and source2 should compare
+*
+* output: -result: 0 if same, 1 if different
+*/
 int isBlockSame(char *source, char *source2, int byteSize){
   int i, result = 0;
   
@@ -129,7 +182,10 @@ int isBlockSame(char *source, char *source2, int byteSize){
 *       and this function will only be called by dictionaryFindLongestMatchingEntry which will provide the value for the
 *       "byte" parameter, which must be an ASCII character  
 *
-* return starting entry
+* input : -dictionary: the dictionary
+*         -      byte: the input byte to be located in the dictionary
+*
+* output: -i: the dictionary index with the code that matches with the input byte
 */
 int firstMarkIndex(Dictionary *dictionary, int byte){
   int i;
@@ -138,9 +194,7 @@ int firstMarkIndex(Dictionary *dictionary, int byte){
 
     if(byte == dictionary->entries[i].code[0])
       return i;
-      
   }
-
 }
 
 //to initialize ASCII into dictionary

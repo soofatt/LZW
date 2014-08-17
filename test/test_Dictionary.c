@@ -1,11 +1,9 @@
 #include "unity.h"
 #include "CException.h"
-#include "ErrorCode.h"
 #include <stdio.h>
 #include <string.h>
 #include "Dictionary.h"
 #include "mock_InStream.h"
-#include "mock_OutStream.h"
 
 void setUp(){}
 void tearDown(){}
@@ -22,7 +20,6 @@ void test_codeNewAndAppend_ba_to_ban(){
   Dictionary *dictionary = dictionaryNew(40);
   char shouldAdd = 'n'; 
   
-
   TEST_ASSERT_EQUAL_STRING("ban",codeNewAndAppend("ba", shouldAdd));
 }
 
@@ -30,7 +27,6 @@ void test_codeNewAndAppend_ban_to_bana(){
   Dictionary *dictionary = dictionaryNew(40);
   char shouldAdd = 'a'; 
   
-
   TEST_ASSERT_EQUAL_STRING("bana",codeNewAndAppend("ban", shouldAdd));
 }
 
@@ -64,8 +60,7 @@ void test_dictionaryAdd_should_add_aba(){
 }
 
 void test_dictionaryAdd_exceed_length_should_return_0(){
-  Dictionary *dictionary = dictionaryNew(4000);
-  dictionary->length = 2;
+  Dictionary *dictionary = dictionaryNew(2);
   char *shouldAdd = "aba";
   int index = 3;
   
@@ -77,8 +72,8 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_abc(){
 
   Dictionary *dictionary = dictionaryNew(4000);
   DictionaryEntry *result;
-  
   InStream *in;
+  in->currentbyte = 0;
   dictionary->entries[0].code = "ab"; 
   dictionary->entries[1].code = "bc"; 
   dictionary->entries[2].code = "cd"; 
@@ -104,8 +99,9 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_def(){
 
   Dictionary *dictionary = dictionaryNew(4000);
   DictionaryEntry *result;
-  
   InStream *in;
+  
+  in->currentbyte = 0;
   dictionary->entries[0].code = "ab"; 
   dictionary->entries[1].code = "bc"; 
   dictionary->entries[2].code = "cd"; 
@@ -133,8 +129,9 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aaac(){
 
   Dictionary *dictionary = dictionaryNew(4000);
   DictionaryEntry *result;
-  
   InStream *in;
+  
+  in->currentbyte = 0;
   dictionary->entries[0].code = "aa"; 
   dictionary->entries[1].code = "aaa";
   
@@ -158,8 +155,9 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aacaad(){
 
   Dictionary *dictionary = dictionaryNew(4000);
   DictionaryEntry *result;
-  
   InStream *in;
+  
+  in->currentbyte = 0;
   dictionary->entries[0].code = "aa"; 
   dictionary->entries[1].code = "ac";
   dictionary->entries[2].code = "aac";
