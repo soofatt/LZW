@@ -16,5 +16,7 @@ typedef struct{
 void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize);
 OutStream *openOutStream(char *fileName, char *openMethod);
 void streamFlush(OutStream *out);
+void streamWriteBit(OutStream *out, int bit);
+void closeOutStream(OutStream *out);
 #endif // OutStream_H
 

@@ -77,4 +77,13 @@ void test_streamWriteBits_write_bit_97_97(){
 
 }
 
+void test_streaWriteBit_write_bit_97(){
+  OutStream *out;
+  out->currentbyte = 0x02;
+  
+  streamWriteBit(out, 1);
+  
+  TEST_ASSERT_EQUAL(3, out->currentbyte);
 
+
+}

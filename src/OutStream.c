@@ -39,20 +39,19 @@ void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
   carryOver = bitSize - 8;
   temp = bitsToWrite >> carryOver;
   
-  out->currentbyte = out->currentbyte | temp;
-  
+  temp = out->currentbyte | temp;
+
   for(i = 0 ; i < 8 ; i++){
-    out->bitIndex++;
-    bit = bit << 1;
-    bit = bit | ((out->currentbyte >> 7-i)&0x01);
     
-    if(out->bitIndex == 7)
-      out->bitIndex = 0;
+    out->currentbyte = out->currentbyte << 1;
+    bit = (temp >> 7-i)&0x01;
+    streamWriteBit(out, bit);
+    
   }
   
+  fputc(out->currentbyte, out->file);
   out->currentbyte = bitsToWrite << (8-carryOver);
   
-  fputc(bit, out->file);
 
 }
 
@@ -65,5 +64,11 @@ void closeOutStream(OutStream *out){
   free(out);
 }
 
+void streamWriteBit(OutStream *out, int bit){
+  out->currentbyte = out->currentbyte | bit;
+  out->bitIndex++;
+  if(out->bitIndex == 7)
+    out->bitIndex = 0;
+}
 
 
