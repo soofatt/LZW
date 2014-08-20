@@ -19,38 +19,56 @@ void test_openInStream_throw_no_file_found(){
 }
 
 //test streamReadBits //
-void test_streamReadBits_read_a_txt_contain_a(){
+void test_streamReadBits_read_test_97_a_txt_contain_a(){
 	CEXCEPTION_T e;
   InStream *in;
   int result;
   
   Try{
-    in = openInStream("a.txt", "r");
+    in = openInStream("test_97_a.txt", "r");
   }Catch(e){
     TEST_ASSERT_EQUAL(1, e);
   }
   
   result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL(97, result);
+  TEST_ASSERT_EQUAL('a', result);
   closeInStream(in);
   
 }
 
-void test_streamReadBits_read_ba_txt_contain_b_and_a(){
+void test_streamReadBits_read_test_98_97_ba_txt_contain_b_and_a(){
 	CEXCEPTION_T e;
   InStream *in;
   int result;
   
   Try{
-    in = openInStream("ba.txt", "r");
+    in = openInStream("test_98_97_ba.txt", "r");
   }Catch(e){
     TEST_ASSERT_EQUAL(1, e);
   }
   
   result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL(98, result);
+  TEST_ASSERT_EQUAL('b', result);
   result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL(97, result);
+  TEST_ASSERT_EQUAL('a', result);
+  
+  closeInStream(in);
+  
+}
+
+void test_streamReadBits_read_94_txt_contain_symbol(){
+	CEXCEPTION_T e;
+  InStream *in;
+  int result;
+  
+  Try{
+    in = openInStream("test_94.txt", "r");
+  }Catch(e){
+    TEST_ASSERT_EQUAL(1, e);
+  }
+  
+  result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL('^', result);
   
   closeInStream(in);
   
