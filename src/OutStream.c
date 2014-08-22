@@ -9,15 +9,15 @@
 * open file for writing
 *
 * input: -openMethod: to write, w
-*        -  fileName: name of file 
+*        -  fileName: name of file
 */
 OutStream *openOutStream(char *fileName, char *openMethod){
   OutStream *outStream = calloc(1, sizeof(OutStream));
 
   outStream->file = fopen(fileName, openMethod);
-  
+
   outStream->filename = fileName;
-  outStream->currentbyte = 0;
+  outStream->currentByte = 0;
   outStream->bitIndex = 0;
   outStream->size = 0;
   return outStream;
@@ -32,29 +32,36 @@ OutStream *openOutStream(char *fileName, char *openMethod){
 *
 * input: -       *out: pointer to OutStream struct
 *        -    bitSize: number of bits to be written
-*        -bitsToWrite: bits to be written 
+*        -bitsToWrite: bits to be written
 */
 void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
   int i, bit = 0, temp = 0;
 
-  temp = bitsToWrite >> out->size;
-  temp = out->currentbyte | temp;
-  
+  if(bitSize != 8){
+    out->size++;
+    temp = bitsToWrite >> out->size;
+    temp = out->currentByte | temp;
+  }
+  else
+    temp = bitsToWrite;
+
   for(i = 0 ; i < 8 ; i++){
-    
-    out->currentbyte = out->currentbyte << 1;
+
+    out->currentByte = out->currentByte << 1;
     bit = (temp >> 7-i)&0x01;
     streamWriteBit(out, bit);
-    
+
   }
-  fputc(out->currentbyte, out->file);
-  out->currentbyte = bitsToWrite << 8 - out->size;
-  out->size++;
-  
+  fputc(out->currentByte, out->file);
+  if(bitSize != 8)
+    out->currentByte = bitsToWrite << 8 - out->size;
+  else 
+    out->currentByte = bitsToWrite << 8;
+
 }
 
 void streamFlush(OutStream *out){
-  fputc(out->currentbyte, out->file);
+  fputc(out->currentByte, out->file);
 }
 
 void closeOutStream(OutStream *out){
@@ -63,7 +70,7 @@ void closeOutStream(OutStream *out){
 }
 
 void streamWriteBit(OutStream *out, int bit){
-  out->currentbyte = out->currentbyte | bit;
+  out->currentByte = out->currentByte | bit;
   out->bitIndex++;
   if(out->bitIndex == 7)
     out->bitIndex = 0;

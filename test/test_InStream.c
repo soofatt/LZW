@@ -1,94 +1,200 @@
 #include "unity.h"
 #include "CException.h"
-#include <stdio.h>
+#include "ErrorCode.h"
 #include "InStream.h"
 
-void setUp(void){}
-void tearDown(void){}
+void setUp(){}
 
-//test openInStream //
-void test_openInStream_throw_no_file_found(){
+void tearDown(){}
+
+void test_openInStream_given_nonexistant_file_should_throw_error(){
 	CEXCEPTION_T e;
   InStream *in;
-  
+
   Try{
-    in = openInStream("test/Data/not_found.txt", "a");
+    in = openInStream("NonExistant.txt", "r");
   }Catch(e){
-    TEST_ASSERT_EQUAL(1, e);
+    TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
   }
 }
 
-//test streamReadBits //
-void test_streamReadBits_read_test_97_a_txt_contain_a(){
+void test_openInStream_given_existant_file_should_read_a(){
 	CEXCEPTION_T e;
   InStream *in;
   int result;
-  
+
   Try{
-    in = openInStream("test/Data/read_a.txt", "r");
+    in = openInStream("test/data/InputTest.txt", "r");
+    result = fgetc(in->file);
+    closeInStream(in);
   }Catch(e){
-    TEST_ASSERT_EQUAL(1, e);
+    TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
   }
-  
-  result = streamReadBits(in, 8);
+
   TEST_ASSERT_EQUAL('a', result);
-  closeInStream(in);
-  
 }
 
-void test_streamReadBits_read_test_98_97_ba_txt_contain_b_and_a(){
+void test_openInStream_given_existant_file_should_read_6(){
 	CEXCEPTION_T e;
   InStream *in;
   int result;
-  
+
   Try{
-    in = openInStream("test/Data/read_ba.txt", "r");
+    in = openInStream("test/data/InputTest_2.txt", "r");
+    result = fgetc(in->file);
+    closeInStream(in);
   }Catch(e){
-    TEST_ASSERT_EQUAL(1, e);
+    TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
+  }
+
+  TEST_ASSERT_EQUAL('6', result);
+}
+
+void test_streamReadBits_given_a_0x61_should_return_a(){
+	CEXCEPTION_T e;
+  InStream *in;
+  int result;
+
+  Try{
+    in = openInStream("test/data/InputTest_3.txt", "r");
+  }Catch(e){
+    TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
   }
   
-  result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL('b', result);
-  result = streamReadBits(in, 8);
+  Try{
+    result = streamReadBits(in, 8);
+  }Catch(e){
+    TEST_ASSERT_EQUAL(END_OF_STREAM, e);
+  }
+  
+  TEST_ASSERT_EQUAL(0, in->bitIndex);
+  TEST_ASSERT_EQUAL(0, in->currentByte);
+  
+  closeInStream(in);
+
   TEST_ASSERT_EQUAL('a', result);
-  
-  closeInStream(in);
-  
 }
 
-void test_streamReadBits_read_94_txt_contain_symbol(){
+void test_streamReadBits_given_a_0x8000_should_return_256(){
 	CEXCEPTION_T e;
   InStream *in;
   int result;
-  
+
   Try{
-    in = openInStream("test/Data/read_94.txt", "r");
+    in = openInStream("test/data/InputTest_4.txt", "r");
   }Catch(e){
-    TEST_ASSERT_EQUAL(1, e);
+    TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
   }
-  
-  result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL('^', result);
+
+  Try{
+    result = streamReadBits(in, 9);
+  }Catch(e){
+    TEST_ASSERT_EQUAL(END_OF_STREAM, e);
+  }  
+    
+  TEST_ASSERT_EQUAL(1, in->bitIndex);
+  TEST_ASSERT_EQUAL(0, in->currentByte);
   
   closeInStream(in);
-  
+
+  TEST_ASSERT_EQUAL(256, result);
 }
 
-//test streamReadBit //
-void test_streamReadBit_read_1_from_0xff(){
-  int result, byte;
+void test_streamReadBits_given_a_0x804040_should_return_256_and_257(){
+	CEXCEPTION_T e;
+  InStream *in;
+  int result, result2;
+
+  Try{
+    in = openInStream("test/data/InputTest_5.txt", "r");
+  }Catch(e){
+    TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
+  }
+
+  Try{
+    result = streamReadBits(in, 9);
+    result2 = streamReadBits(in, 9);
+  }Catch(e){
+    TEST_ASSERT_EQUAL(END_OF_STREAM, e);
+  }  
+    
+  TEST_ASSERT_EQUAL(2, in->bitIndex);
+  TEST_ASSERT_EQUAL(0, in->currentByte);
   
-  byte = 0x97;
-  result = streamReadBit(byte);
-  
-  TEST_ASSERT_EQUAL_HEX(0x1, result);
+  closeInStream(in);
+
+  TEST_ASSERT_EQUAL(256, result);
+  TEST_ASSERT_EQUAL(257, result2);
 }
 
-void test_streamReadBit_read_0_from_0x0f(){
-  int result, byte;
+void test_streamReadBits_given_a_0x804040_should_return_97_and_257(){
+	CEXCEPTION_T e;
+  InStream *in;
+  int result, result2;
+
+  Try{
+    in = openInStream("test/data/InputTest_6.txt", "r");
+  }Catch(e){
+    TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
+  }
+
+  Try{
+    result = streamReadBits(in, 8);
+    result2 = streamReadBits(in, 9);
+  }Catch(e){
+    TEST_ASSERT_EQUAL(END_OF_STREAM, e);
+  }  
+    
+  TEST_ASSERT_EQUAL(1, in->bitIndex);
+  TEST_ASSERT_EQUAL(0, in->currentByte);
   
-  byte = 0x0f;
-  result = streamReadBit(byte);
+  closeInStream(in);
+
+  TEST_ASSERT_EQUAL(97, result);
+  TEST_ASSERT_EQUAL(256, result2);
+}
+
+void test_streamReadBits_given_a_0x62616e_should_return_98_97_110(){
+	CEXCEPTION_T e;
+  InStream *in;
+  int result, result2, result3;
+
+  Try{
+    in = openInStream("test/data/InputTest_7.txt", "r");
+  }Catch(e){
+    TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
+  }
+
+  Try{
+    result = streamReadBits(in, 8);
+    result2 = streamReadBits(in, 8);
+    result3 = streamReadBits(in, 8);
+  }Catch(e){
+    TEST_ASSERT_EQUAL(END_OF_STREAM, e);
+  }  
+    
+  TEST_ASSERT_EQUAL(0, in->bitIndex);
+  TEST_ASSERT_EQUAL(0, in->currentByte);
   
+  closeInStream(in);
+
+  TEST_ASSERT_EQUAL(98, result);
+  TEST_ASSERT_EQUAL(97, result2);
+  TEST_ASSERT_EQUAL(110, result3);
+}
+
+void test_streamReadBit_given_0x97_should_return_1(){
+	int result;
+
+  result = streamReadBit(0x97);
+
+  TEST_ASSERT_EQUAL(1, result);
+}
+
+void test_streamReadBit_given_0x37_should_return_0(){
+	int result;
+
+  result = streamReadBit(0x37);
+
   TEST_ASSERT_EQUAL(0, result);
 }

@@ -1,81 +1,94 @@
 #include "Dictionary.h"
-#include "CException.h"
-#include "LZWEncoder.h"
 #include <stdio.h>
-#include <string.h>
 #include <malloc.h>
+#include <String.h>
 #include "InStream.h"
 
-/*
-* to append a character to a string or another character
-* 
-* input : -     oldCode: old string or character
-*         -codeToAppend: the character to be appended
-*
-* output: -newCode: the new string
-*/
-char *codeNewAndAppend(char *oldCode, char codeToAppend){
-  char *newCode = malloc((strlen(oldCode))+ 2);
+char currentByte;
 
-  strcpy(newCode, oldCode);
-  newCode[(strlen(oldCode))] = codeToAppend;
-  newCode[(strlen(oldCode))+1] = '\0';
-
-  return newCode;
-}
-
-/*
-* new dictionary
-*
-* input : -length: dictionary length
-*
-* output: -dictionary: the dictionary
-*/
+/*To create a new custom dictionary.
+ *
+ *Input: length -> the length dictionary.
+ *
+ *Output:dictionary -> the dictionary.
+ *
+ *Throw:  -
+ *
+ */
 Dictionary *dictionaryNew(int length){
-  Dictionary *dictionary;
-
-  dictionary = malloc(sizeof(Dictionary));
-  dictionary->entries = calloc(length, sizeof(DictionaryEntry));
-  dictionary->length = length;
+	Dictionary *dictionary = malloc(sizeof(Dictionary));
+	dictionary->entries = calloc(length, sizeof(DictionaryEntry));
+	dictionary->length = length;
   dictionary->size = 256;
-  return dictionary;
+	
+	return dictionary;
 }
 
-/*
-* delete dictionary
-* 
-* input : -dict: the dictionary
-*/
-void dictionaryDel(Dictionary *dict){
-  int i;
-
-  for(i =0 ; i < dict->length ; i++){
-    if(dict->entries[i].code != NULL)
-      free(dict->entries[i].code);
-  }
-
-  free(dict);
+/*To append a character to a string
+ *
+ *Input: *oldCode -> the old string
+ *       codeToAppend -> the character to be appended to the old string.
+ *
+ *Output:newCode -> the new string with the appended character.
+ *
+ *Throw:  -
+ *
+ */
+char *codeNewAndAppend(char *oldCode, char codeToAppend){
+	char *newCode = malloc((strlen(oldCode)) + 1 + 1); 
+	int codeLen = strlen(oldCode);
+	
+	newCode = strcpy(newCode, oldCode);
+	
+	newCode[codeLen] = codeToAppend;
+	newCode[codeLen+1] = '\0';
+	
+	return newCode;
 }
 
-/*
-* add new dictionary entry
-* 
-* input : - dict: the dictionary
-*       : - code: the code to add
-*       : -index: the dictionary index where the code is supposed to be saved at
-*
-* output: -availability: 1 if successful, 0 if failed
-*/
+/*To add an entry into the custom dictionary.
+ *
+ *Input: *dict -> the dictionary.
+ *       *code -> the string(entry) to be added into the custom dictionary.
+ *       index -> the index where the new entry should be inserted at.
+ *
+ *Output:1 -> if entry was successfully added.
+ *       0 -> if entry failed to be added into custom dictionary.
+ *
+ *Throw:  -
+ *
+ */
 int dictionaryAdd(Dictionary *dict, char *code, int index){
-  int availability =0;
-
-  if(dict->length > index){
+  
+  if(index >= dict->length || index < 0){
+    return 0;
+  }
+  else{
     dict->entries[index].code = code;
     dict->entries[index].length = strlen(code);
-    availability = 1;
+    dict->size++;
+    return 1;
   }
+}
 
-  return availability;
+/*To delete the dictionary.
+ *
+ *Input: *dict -> the dictionary.
+ *
+ *Output: -
+ *
+ *Throw:  -
+ *
+ */
+void dictionaryDel(Dictionary *dict){
+	int i;
+	
+	for(i = 0; i < dict->length; i++){
+		if(dict->entries[i].code != NULL)
+      free(dict->entries[i].code);
+	}
+  
+  free(dict);
 }
 
 /*
@@ -96,10 +109,10 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
   * 
   * firstMarkIndex will locate the first dictionary index that matches byte
   */
-  if(in->currentbyte == 0)
+  if(in->currentByte == 0)
     byte = streamReadBits(in, 8);
   else
-    byte = in->currentbyte;
+    byte = currentByte;
     
   markIndex = firstMarkIndex(dictionary, byte);
   
@@ -136,11 +149,11 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
           byte = streamReadBits(in, 8);
           
           //if byte is -1, end
-          if(byte == -1)
+          if(byte == -1){
             return &dictionary->entries[markIndex];
-          
-          //save byte in in->currentbyte
-          in->currentbyte = byte;
+          }
+          //save byte in currentByte global variable
+          currentByte = byte;
         }
       }
     }
@@ -207,5 +220,3 @@ void dictionaryEntryInitializer(Dictionary *dictionary){
   }
 
 }
-
-

@@ -19,15 +19,9 @@ void test_lzwEncoder_encode_banana(){
   in = openInStream("test/Data/lzw_banana.txt", "r");
   out = openOutStream("test/Data/lzw_banana_enc.txt", "w");
   
-  Try{
-    lzwEncoder(in, dictionary, out);
-  }Catch(e){
-    TEST_ASSERT_EQUAL(2, e);
-    TEST_ASSERT_EQUAL_STRING("ba", dictionary->entries[256].code);
-    TEST_ASSERT_EQUAL_STRING("an", dictionary->entries[257].code);
-    TEST_ASSERT_EQUAL_STRING("na", dictionary->entries[258].code); 
-    TEST_ASSERT_EQUAL_STRING("ana", dictionary->entries[259].code); 
-  }
+
+  lzwEncoder(in, dictionary, out);
+
 }
 
 void test_lzwEncoder_encode_aaaaaa(){
@@ -39,12 +33,9 @@ void test_lzwEncoder_encode_aaaaaa(){
   in = openInStream("test/Data/lzw_aaaaaa.txt", "r");
   out = openOutStream("test/Data/lzw_aaaaaa_enc.txt", "w");
   
-  Try{
-    lzwEncoder(in, dictionary, out);
-  }Catch(e){
-    TEST_ASSERT_EQUAL_STRING("aa", dictionary->entries[256].code);
-    TEST_ASSERT_EQUAL_STRING("aaa", dictionary->entries[257].code);
-  }
+
+  lzwEncoder(in, dictionary, out);
+
 }
 
 void test_lzwEncoder_encode_banana_nanaba(){
@@ -56,18 +47,9 @@ void test_lzwEncoder_encode_banana_nanaba(){
   in = openInStream("test/Data/lzw_banana_nanaba.txt", "r");
   out = openOutStream("test/Data/lzw_banana_nanaba_enc.txt", "w");
   
-  Try{
-    lzwEncoder(in, dictionary, out);
-  }Catch(e){
-    TEST_ASSERT_EQUAL_STRING("ba", dictionary->entries[256].code);
-    TEST_ASSERT_EQUAL_STRING("an", dictionary->entries[257].code);
-    TEST_ASSERT_EQUAL_STRING("na", dictionary->entries[258].code); 
-    TEST_ASSERT_EQUAL_STRING("ana", dictionary->entries[259].code); 
-    TEST_ASSERT_EQUAL_STRING("a_", dictionary->entries[260].code); 
-    TEST_ASSERT_EQUAL_STRING("_n", dictionary->entries[261].code); 
-    TEST_ASSERT_EQUAL_STRING("nan", dictionary->entries[262].code); 
-    TEST_ASSERT_EQUAL_STRING("nab", dictionary->entries[263].code); 
-  }
+
+  lzwEncoder(in, dictionary, out);
+
 }
 
 // getIntFromChar test//

@@ -6,7 +6,7 @@
 typedef struct{
   FILE *file;
   char *filename;
-  uint8 currentbyte;
+  uint8 currentByte;
   // uint8 length;
   uint32 size;
   // uint32 byteIndex;
