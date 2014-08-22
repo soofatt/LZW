@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "OutStream.h"
+#include "InStream.h"
 #include "CException.h"
 #include "ErrorCode.h"
 #include <malloc.h>
@@ -18,6 +19,7 @@ OutStream *openOutStream(char *fileName, char *openMethod){
   outStream->filename = fileName;
   outStream->currentbyte = 0;
   outStream->bitIndex = 0;
+  outStream->size = 0;
   return outStream;
 }
 
@@ -33,14 +35,11 @@ OutStream *openOutStream(char *fileName, char *openMethod){
 *        -bitsToWrite: bits to be written 
 */
 void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
-  int i, bit = 0, carryOver, temp = 0;
-  
-  temp = bitsToWrite;
-  carryOver = bitSize - 8;
-  temp = bitsToWrite >> carryOver;
-  
-  temp = out->currentbyte | temp;
+  int i, bit = 0, temp = 0;
 
+  temp = bitsToWrite >> out->size;
+  temp = out->currentbyte | temp;
+  
   for(i = 0 ; i < 8 ; i++){
     
     out->currentbyte = out->currentbyte << 1;
@@ -48,11 +47,10 @@ void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
     streamWriteBit(out, bit);
     
   }
-  
   fputc(out->currentbyte, out->file);
-  out->currentbyte = bitsToWrite << (8-carryOver);
+  out->currentbyte = bitsToWrite << 8 - out->size;
+  out->size++;
   
-
 }
 
 void streamFlush(OutStream *out){

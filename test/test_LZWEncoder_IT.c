@@ -16,8 +16,8 @@ void test_lzwEncoder_encode_banana(){
   InStream *in;
   Dictionary *dictionary = dictionaryNew(4000);
 
-  in = openInStream("banana.txt", "r");
-  out = openOutStream("banana_enc.txt", "w");
+  in = openInStream("test/Data/lzw_banana.txt", "r");
+  out = openOutStream("test/Data/lzw_banana_enc.txt", "w");
   
   Try{
     lzwEncoder(in, dictionary, out);
@@ -36,8 +36,8 @@ void test_lzwEncoder_encode_aaaaaa(){
   InStream *in;
   Dictionary *dictionary = dictionaryNew(4000);
   
-  in = openInStream("aaaaaa.txt", "r");
-  out = openOutStream("aaaaaa_enc.txt", "w");
+  in = openInStream("test/Data/lzw_aaaaaa.txt", "r");
+  out = openOutStream("test/Data/lzw_aaaaaa_enc.txt", "w");
   
   Try{
     lzwEncoder(in, dictionary, out);
@@ -53,8 +53,8 @@ void test_lzwEncoder_encode_banana_nanaba(){
   InStream *in;
   Dictionary *dictionary = dictionaryNew(4000);
 
-  in = openInStream("banana_nanaba.txt", "r");
-  out = openOutStream("banana_nanaba_enc.txt", "w");
+  in = openInStream("test/Data/lzw_banana_nanaba.txt", "r");
+  out = openOutStream("test/Data/lzw_banana_nanaba_enc.txt", "w");
   
   Try{
     lzwEncoder(in, dictionary, out);

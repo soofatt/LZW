@@ -6,130 +6,127 @@
 void setUp(void){}
 void tearDown(void){}
 
-void test_streamWriteBits_write_bit_a(){
+void test_streamWriteBits_write_a(){
   OutStream *out;
   InStream *in;
   int result;
   
-  out = openOutStream("write_a.txt", "w");
+  out = openOutStream("test/Data/write_a.txt", "w");
   streamWriteBits(out, 97, 8);
   closeOutStream(out);
   
-  in = openInStream("write_a.txt", "r");
+  in = openInStream("test/Data/write_a.txt", "r");
   result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL('a', result);     
   closeInStream(in);
   
-  TEST_ASSERT_EQUAL('a', result);
-
 }
 
-//1 0000 0000 -> 1000 0000 |0 (carry to next byte)
-void test_streamWriteBits_write_bit_256(){
+/*
+*  should write 0110 0010 1000 0000 0000 0000
+*               b         128       0
+*/
+void test_streamWriteBits_write_b_256(){
   OutStream *out;
-  InStream *in;
   int result;
+  InStream *in;
   
-  out = openOutStream("write_256.txt", "w");
+  out = openOutStream("test/Data/write_b_256.txt", "w");
+  streamWriteBits(out, 98, 8);
   streamWriteBits(out, 256, 9);
+  streamWriteBits(out, 0, 9);
   closeOutStream(out);
-  
-  in = openInStream("write_256.txt", "r");
+
+  in = openInStream("test/Data/write_b_256.txt", "r");
   result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL(98, result);
+  result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL(128, result);    
+  result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL(0, result);  
   closeInStream(in);
-  
-  TEST_ASSERT_EQUAL(128, result);
 }
 
 /*
-* 1 0000 0001 -> 1000 0000 |1 (carry to next byte)
-*   0110 0001 -> (carry over) 1011 0000 |1 (carry to next byte)
+* should write 0110 0010 0011 0000 1000 0000
+*              b         48        128
 */
-void test_streamWriteBits_write_bit_256_and_97(){
+void test_streamWriteBits_write_ba(){
   OutStream *out;
   int result;
   InStream *in;
   
-  out = openOutStream("write_257_a.txt", "w");
-  streamWriteBits(out, 257, 9);
+  out = openOutStream("test/Data/write_ba.txt", "w");
+  streamWriteBits(out, 98, 8);
   streamWriteBits(out, 97, 9);
+  streamWriteBits(out, 0, 9);
   closeOutStream(out);
 
-  in = openInStream("write_257_a.txt", "r");
+  in = openInStream("test/Data/write_ba.txt", "r");
+  result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL('b', result);
+  result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL(48, result);  
   result = streamReadBits(in, 8);
   TEST_ASSERT_EQUAL(128, result);
-  result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL(176, result);
   closeInStream(in);
+
 }
 
 /*
-*   0110 0001 -> 0110 0001 (nothing to carry to next byte)
-* 1 0000 0001 -> 1000 0000 |1 (carry to next byte)
+* should write 0110 0010 1000 0000 0100 0000 0100 0000 
+*              b         128       64        64
 */
-void test_streamWriteBits_write_bit_97_and_257(){
+void test_streamWriteBits_write_bit_b_256_257(){
   OutStream *out;
   int result;
   InStream *in;
   
-  out = openOutStream("write_a_257.txt", "w");
-  streamWriteBits(out, 97, 8);
+  out = openOutStream("test/Data/write_b_256_257.txt", "w");
+  streamWriteBits(out, 98, 8);
+  streamWriteBits(out, 256, 9);
   streamWriteBits(out, 257, 9);
-  closeOutStream(out);
-
-  in = openInStream("write_a_257.txt", "r");
-  result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL('a', result);
-  result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL(128, result);
-  closeInStream(in);
-}
-
-/*
-*   0110 0001 -> 0110 0001
-* 1 0000 0001 -> 1000 0000 |1
-*   0110 0001 -> 1011 0000 |1
-*/
-void test_streamWriteBits_write_bit_97_257_97(){
-  OutStream *out;
-  int result;
-  InStream *in;
-  
-  out = openOutStream("write_a_257_a.txt", "w");
-  streamWriteBits(out, 97, 8);
-  streamWriteBits(out, 257, 9);
-  streamWriteBits(out, 97, 9);
+  streamWriteBits(out, 0, 9);
   closeOutStream(out);
   
-  in = openInStream("write_a_257_a.txt", "r");
+  in = openInStream("test/Data/write_b_256_257.txt", "r");
   result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL('a', result);
+  TEST_ASSERT_EQUAL('b', result);
   result = streamReadBits(in, 8);
   TEST_ASSERT_EQUAL(128, result);
   result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL(176, result);
+  TEST_ASSERT_EQUAL(64, result);  
+  result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL(64, result);
   closeInStream(in);
   
 }
 
 /*
-*   0110 0001 -> 0110 0001
-* 0 0110 0001 -> 0011 0000 1
+* should write 0110 0010 0011 0000 1001 1011 1000 0000
+*              b         48        155       128
 */
-void test_streamWriteBits_write_bit_97_97(){
+void test_streamWriteBits_write_b_a_n(){
   OutStream *out;
   int result;
   InStream *in;
   
-  out = openOutStream("write_a_a.txt", "w");
-  streamWriteBits(out, 97, 8);
+  out = openOutStream("test/Data/write_b_a_n.txt", "w");
+  streamWriteBits(out, 98, 8);
   streamWriteBits(out, 97, 9);
+  streamWriteBits(out, 110, 9);
+  streamWriteBits(out, 0, 9);
   closeOutStream(out);
 
-  in = openInStream("write_a_a.txt", "r");
+  in = openInStream("test/Data/write_b_a_n.txt", "r");
   result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL('a', result);
+  TEST_ASSERT_EQUAL('b', result);
   result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL(48, result);
+  TEST_ASSERT_EQUAL(48, result);  
+  result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL(155, result);  
+  result = streamReadBits(in, 8);
+  TEST_ASSERT_EQUAL(128, result);
   closeInStream(in);
 }
 

@@ -8,7 +8,7 @@ typedef struct{
   char *filename;
   uint8 currentbyte;
   // uint8 length;
-  // uint32 size;
+  uint32 size;
   // uint32 byteIndex;
   uint32 bitIndex;
 }OutStream;

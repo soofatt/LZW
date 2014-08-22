@@ -17,7 +17,7 @@
 *        -dictionary: the dictionary
 */
 void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
-  int dictIndex = 256, bitsToWrite = 8, marker = 256, result;
+  int dictIndex = 256, bitSize = 8, marker = 256, result;
   char *code;
   dictionaryEntryInitializer(dictionary);
   in->currentbyte = 0;
@@ -32,16 +32,18 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
     if(dictionaryAdd(dictionary, codeNewAndAppend(code, in->currentbyte), dictIndex) == 1){
     
       result = getIntFromChar(dictionary, code);
-      streamWriteBits(out, result, bitsToWrite);
+      streamWriteBits(out, result, bitSize);
      
-     //end
-     if(in->byteIndex == -1)
-        break;
-
-      //condition to add bitsToWrite
+      //condition to add bitSize
       if(dictIndex == marker){ 
         marker = marker * 2;
-        bitsToWrite++;
+        bitSize++;
+      }
+      
+     //end
+     if(in->byteIndex == -1){
+        streamWriteBits(out, 0, bitSize);       
+        break;
       }
       
       dictIndex++;

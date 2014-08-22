@@ -12,7 +12,7 @@ void test_openInStream_throw_no_file_found(){
   InStream *in;
   
   Try{
-    in = openInStream("not_found.txt", "a");
+    in = openInStream("test/Data/not_found.txt", "a");
   }Catch(e){
     TEST_ASSERT_EQUAL(1, e);
   }
@@ -25,7 +25,7 @@ void test_streamReadBits_read_test_97_a_txt_contain_a(){
   int result;
   
   Try{
-    in = openInStream("test_97_a.txt", "r");
+    in = openInStream("test/Data/read_a.txt", "r");
   }Catch(e){
     TEST_ASSERT_EQUAL(1, e);
   }
@@ -42,7 +42,7 @@ void test_streamReadBits_read_test_98_97_ba_txt_contain_b_and_a(){
   int result;
   
   Try{
-    in = openInStream("test_98_97_ba.txt", "r");
+    in = openInStream("test/Data/read_ba.txt", "r");
   }Catch(e){
     TEST_ASSERT_EQUAL(1, e);
   }
@@ -62,7 +62,7 @@ void test_streamReadBits_read_94_txt_contain_symbol(){
   int result;
   
   Try{
-    in = openInStream("test_94.txt", "r");
+    in = openInStream("test/Data/read_94.txt", "r");
   }Catch(e){
     TEST_ASSERT_EQUAL(1, e);
   }
