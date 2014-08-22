@@ -50,6 +50,7 @@ int streamReadBits(InStream *in, int bitSize){
   }
 
   while(byteCount <= (bitSize/8)){
+  
     if(in->currentByte != 0)
       byteToRead = in->currentByte;
     else{

@@ -1,22 +1,22 @@
 #ifndef OutStream_H
 #define OutStream_H
-
 #include <stdio.h>
 #include "Utils.h"
 
-typedef struct OutStream{
-	FILE *file;
-	char *filename;
-	uint8 currentByte;
-	// uint32 length;
-	// uint32 byteIndex;
-	 uint32 bitIndex;
+typedef struct{
+  FILE *file;
+  char *filename;
+  uint8 currentByte;
+  // uint8 length;
+  uint32 size;
+  // uint32 byteIndex;
+  uint32 bitIndex;
 }OutStream;
 
 void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize);
-void streamWriteBit(OutStream *out, uint8 bitToWrite);
-OutStream *openOutStream(char *filename, char *openMethod);
+OutStream *openOutStream(char *fileName, char *openMethod);
 void streamFlush(OutStream *out);
+void streamWriteBit(OutStream *out, int bit);
 void closeOutStream(OutStream *out);
-
 #endif // OutStream_H
+

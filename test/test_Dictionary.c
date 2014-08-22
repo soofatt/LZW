@@ -1,5 +1,6 @@
 #include "unity.h"
 #include "Dictionary.h"
+#include "mock_InStream.h"
 
 void setUp(){}
 void tearDown(){}
