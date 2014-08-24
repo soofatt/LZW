@@ -4,7 +4,7 @@
 #include "mock_InStream.h"
 #include "mock_OutStream.h"
 #include "Dictionary.h"
-
+unsigned char currentByte;
 void setUp(){}
 void tearDown(){}
 
@@ -14,22 +14,18 @@ void test_lzwEncoder_encode_banana(){
   OutStream out;
   InStream in;
   Dictionary *dictionary = dictionaryNew(4000);
-  in.currentByte = 0;
+  currentByte = 0;
   
   streamReadBits_ExpectAndReturn(&in, 8, 98);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamWriteBits_Expect(&out, 98, 8);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamWriteBits_Expect(&out, 97, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamWriteBits_Expect(&out, 110, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamWriteBits_Expect(&out, 257, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, -1);
   streamWriteBits_Expect(&out, 97, 9);
   streamReadBits_ExpectAndThrow(&in, 8, -1);
@@ -49,16 +45,14 @@ void test_lzwEncoder_encode_aaaaaa(){
   OutStream out;
   InStream in;
   Dictionary *dictionary = dictionaryNew(4000);
-  in.currentByte = 0;
+  currentByte = 0;
 
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamWriteBits_Expect(&out, 97, 8);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamWriteBits_Expect(&out, 256, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, -1);
@@ -78,36 +72,28 @@ void test_lzwEncoder_encode_banana_nanaba(){
   OutStream out;
   InStream in;
   Dictionary *dictionary = dictionaryNew(4000);
-  in.currentByte = 0;
+  currentByte = 0;
 
   streamReadBits_ExpectAndReturn(&in, 8, 98);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamWriteBits_Expect(&out, 98, 8);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamWriteBits_Expect(&out, 97, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamWriteBits_Expect(&out, 110, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamWriteBits_Expect(&out, 257, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 95);
   streamWriteBits_Expect(&out, 97, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 95);  
   streamReadBits_ExpectAndReturn(&in, 8, 110);  
   streamWriteBits_Expect(&out, 95, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamWriteBits_Expect(&out, 258, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 98);
   streamWriteBits_Expect(&out, 258, 9);
-  streamReadBits_ExpectAndReturn(&in, 8, 98);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, -1);
   streamWriteBits_Expect(&out, 256, 9);

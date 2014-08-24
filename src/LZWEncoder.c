@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
-char currentByte;
+unsigned char currentByte;
 
 /*
 * dictIndex and marker is used to determine if bitsToWrite should increase to x bits
@@ -24,31 +24,36 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
   dictionaryEntryInitializer(dictionary);
 
   while(1){
+  printf("while start\n");
     code = dictionaryFindLongestMatchingEntry(in, dictionary)->code;
 
     /*
-    * append in->currentByte to the marked code passed in from dictionaryFindLongestMatchingEntry then add it into dictionary
+    * append currentByte to the marked code passed in from dictionaryFindLongestMatchingEntry then add it into dictionary
     * utilizes getIntFromChar to dig through the dictionary to obtain the correct index to be written
     */
     if(dictionaryAdd(dictionary, codeNewAndAppend(code, currentByte), dictIndex) == 1){
 
       result = getIntFromChar(dictionary, code);
+      printf("result%x\n", result);
+      printf("WRITINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\n");
       streamWriteBits(out, result, bitSize);
-
+      printf("WRITINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\n");
       //condition to add bitSize
       if(dictIndex == marker){
         marker = marker * 2;
         bitSize++;
       }
-
      //end
      if(in->byteIndex == -1){
+        printf("end\n");
         streamWriteBits(out, 0, bitSize);
         break;
       }
-
       dictIndex++;
     }
+    else
+        printf("did not enter\n");
+    printf("while end\n");
 
   }
 }

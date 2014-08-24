@@ -3,7 +3,7 @@
 #include <string.h>
 #include "Dictionary.h"
 #include "mock_InStream.h"
-
+unsigned char currentByte;
 void setUp(){}
 void tearDown(){}
 
@@ -72,7 +72,7 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_abc(){
   Dictionary *dictionary = dictionaryNew(4000);
   DictionaryEntry *result;
   InStream *in;
-  in->currentByte = 0;
+  currentByte = 0;
   dictionary->entries[0].code = "ab";
   dictionary->entries[1].code = "bc";
   dictionary->entries[2].code = "cd";
@@ -99,8 +99,7 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_def(){
   Dictionary *dictionary = dictionaryNew(4000);
   DictionaryEntry *result;
   InStream *in;
-
-  in->currentByte = 0;
+  currentByte = 0;
   dictionary->entries[0].code = "ab";
   dictionary->entries[1].code = "bc";
   dictionary->entries[2].code = "cd";
@@ -130,7 +129,7 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aaac(){
   DictionaryEntry *result;
   InStream *in;
 
-  in->currentByte = 0;
+  currentByte = 0;
   dictionary->entries[0].code = "aa";
   dictionary->entries[1].code = "aaa";
 
@@ -156,7 +155,7 @@ void test_dictionaryFindLongestMatchingEntry_find_entry_aacaad(){
   DictionaryEntry *result;
   InStream *in;
 
-  in->currentByte = 0;
+  currentByte = 0;
   dictionary->entries[0].code = "aa";
   dictionary->entries[1].code = "ac";
   dictionary->entries[2].code = "aac";

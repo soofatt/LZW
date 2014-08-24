@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <malloc.h>
 
+unsigned int tempCurrentByte;
+
 /*To open a file with read method for reading
  *
  *Input: *fileName -> the file name.
@@ -43,7 +45,7 @@ InStream *openInStream(char *fileName, char *openMethod){
 int streamReadBits(InStream *in, int bitSize){
   int i, inputByte, outputWhole = 0, bitCount = 0, byteCount = 0;
   uint8 byteToRead, tempBitRead = 0;
-
+  
   if(feof(in->file) != 0){
     in->byteIndex = -1;
     return -1;
@@ -51,12 +53,17 @@ int streamReadBits(InStream *in, int bitSize){
 
   while(byteCount <= (bitSize/8)){
   
-    if(in->currentByte != 0)
+    if(tempCurrentByte != 0){
+      in->currentByte = tempCurrentByte & 0x0FF;
       byteToRead = in->currentByte;
+    }
     else{
-      if((inputByte = fgetc(in->file)) == EOF)
-        break;
+      inputByte = fgetc(in->file);
+      if(inputByte == EOF){
+        printf("EOF reached\n");
+        break;}
       byteToRead = inputByte;
+      printf("read Input : %x\n", inputByte);
     }
 
     for(i = in->bitIndex; i < 8; i++){
@@ -73,11 +80,15 @@ int streamReadBits(InStream *in, int bitSize){
         bitCount++;
     }
     if(i == 8){
+      printf("not full output\n");
       byteCount++;
-      in->currentByte = byteToRead;
+      tempCurrentByte = 0;
     }
     else if(bitCount == (bitSize - 1)){
       in->currentByte = byteToRead;
+      printf("full output\n");
+      if(in->bitIndex != 0)
+        tempCurrentByte = in->currentByte | 0x100;
       break;
     }
   }
