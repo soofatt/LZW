@@ -6,7 +6,7 @@
 void setUp(){}
 
 void tearDown(){}
-
+unsigned int tempCurrentByte;
 void test_openInStream_given_nonexistant_file_should_throw_error(){
 	CEXCEPTION_T e;
   InStream *in;
@@ -104,19 +104,15 @@ void test_streamReadBits_given_a_0x804040_should_return_256_and_257(){
 	CEXCEPTION_T e;
   InStream *in;
   int result, result2;
-
+  tempCurrentByte = 0;
   Try{
     in = openInStream("test/data/InputTest_5.txt", "r");
   }Catch(e){
     TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
   }
 
-  Try{
-    result = streamReadBits(in, 9);
-    result2 = streamReadBits(in, 9);
-  }Catch(e){
-    TEST_ASSERT_EQUAL(END_OF_STREAM, e);
-  }  
+  result = streamReadBits(in, 9);
+  result2 = streamReadBits(in, 9);
     
   TEST_ASSERT_EQUAL(2, in->bitIndex);
   TEST_ASSERT_EQUAL(0, in->currentByte);
@@ -131,7 +127,7 @@ void test_streamReadBits_given_a_0x804040_should_return_97_and_257(){
 	CEXCEPTION_T e;
   InStream *in;
   int result, result2;
-
+  tempCurrentByte = 0;
   Try{
     in = openInStream("test/data/InputTest_6.txt", "r");
   }Catch(e){
@@ -158,7 +154,7 @@ void test_streamReadBits_given_a_0x62616e_should_return_98_97_110(){
 	CEXCEPTION_T e;
   InStream *in;
   int result, result2, result3;
-
+  tempCurrentByte = 0;
   Try{
     in = openInStream("test/data/InputTest_7.txt", "r");
   }Catch(e){

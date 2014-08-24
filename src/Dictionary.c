@@ -4,7 +4,7 @@
 #include <String.h>
 #include "InStream.h"
 
-char currentByte;
+unsigned char currentByte;
 
 /*To create a new custom dictionary.
  *
@@ -101,7 +101,6 @@ void dictionaryDel(Dictionary *dict){
 */
 DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *dictionary){
   int byte, index, markIndex, longestCode = 0, k = 0;
-  
   /*
   * check if in->currentbyte is 0
   *  0: byte will get value from file
@@ -109,11 +108,11 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
   * 
   * firstMarkIndex will locate the first dictionary index that matches byte
   */
-  if(in->currentByte == 0)
+  if(currentByte == 0)
     byte = streamReadBits(in, 8);
   else
     byte = currentByte;
-    
+  
   markIndex = firstMarkIndex(dictionary, byte);
   
   //to loop through dictionary
@@ -143,14 +142,20 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
           }
 
           else if(byte != dictionary->entries[index].code[k])
-            break;
+           break;
           
           //after marking longest index, read a byte
           byte = streamReadBits(in, 8);
           
+          //solution to problem: streamReadBits will read null before reading -1, therefore encoder will write an extra byte
+          if(byte == 0){
+            byte = streamReadBits(in, 8);
+          }
+          
           //if byte is -1, end
           if(byte == -1){
-            return &dictionary->entries[markIndex];
+            printf("-1\n");
+           return &dictionary->entries[markIndex];
           }
           //save byte in currentByte global variable
           currentByte = byte;

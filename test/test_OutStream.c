@@ -6,7 +6,7 @@
 void setUp(){}
 
 void tearDown(){}
-//TEST ASSERT MORE THING IN INSTREAM TEST
+
 void test_openOutStream_given_output_test_file_should_write_d_to_file(){
   OutStream *out;
 
@@ -49,8 +49,8 @@ void test_streamWriteBits_given_bitsToWrite_97_should_write_a_to_file(){
 
   streamWriteBits(out, 97, 8);
   
-  // TEST_ASSERT_EQUAL(97, out->currentByte);
-  // TEST_ASSERT_EQUAL(0, out->bitIndex);
+  TEST_ASSERT_EQUAL(0, out->currentByte);
+  TEST_ASSERT_EQUAL(1, out->bitIndex);
   
   closeOutStream(out);
 }
@@ -62,13 +62,13 @@ void test_streamWriteBits_given_bitsToWrite_97_and_98_should_write_ab_to_file(){
 
   streamWriteBits(out, 97, 8);
   
-  // TEST_ASSERT_EQUAL(97, out->currentByte);
-  // TEST_ASSERT_EQUAL(0, out->bitIndex);
+  TEST_ASSERT_EQUAL(0, out->currentByte);
+  TEST_ASSERT_EQUAL(1, out->bitIndex);
   
   streamWriteBits(out, 98, 8);
   
-  // TEST_ASSERT_EQUAL(98, out->currentByte);
-  // TEST_ASSERT_EQUAL(0, out->bitIndex);
+  TEST_ASSERT_EQUAL(0, out->currentByte);
+  TEST_ASSERT_EQUAL(2, out->bitIndex);
   
   closeOutStream(out);
 }
@@ -80,18 +80,18 @@ void test_streamWriteBits_given_bitsToWrite_98_97_110_should_write_ban_to_file()
 
   streamWriteBits(out, 98, 8);
   
-  // TEST_ASSERT_EQUAL(98, out->currentByte);
-  // TEST_ASSERT_EQUAL(0, out->bitIndex);
+  TEST_ASSERT_EQUAL(0, out->currentByte);
+  TEST_ASSERT_EQUAL(1, out->bitIndex);
   
   streamWriteBits(out, 97, 8);
   
-  // TEST_ASSERT_EQUAL(97, out->currentByte);
-  // TEST_ASSERT_EQUAL(0, out->bitIndex);
+  TEST_ASSERT_EQUAL(0, out->currentByte);
+  TEST_ASSERT_EQUAL(2, out->bitIndex);
   
   streamWriteBits(out, 110, 8);
   
-  // TEST_ASSERT_EQUAL(110, out->currentByte);
-  // TEST_ASSERT_EQUAL(0, out->bitIndex);
+  TEST_ASSERT_EQUAL(0, out->currentByte);
+  TEST_ASSERT_EQUAL(3, out->bitIndex);
   
   closeOutStream(out);
 }

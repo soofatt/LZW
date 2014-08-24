@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "Utils.h"
 
+extern unsigned int tempCurrentByte;
+
 typedef struct InStream{
 	FILE *file;
 	char *filename;

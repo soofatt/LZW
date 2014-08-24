@@ -3,7 +3,7 @@
 
 #include "InStream.h"
 
-extern char currentByte;
+extern unsigned char currentByte;
 
 typedef struct {
 	char *code;
