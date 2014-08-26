@@ -37,6 +37,11 @@ OutStream *openOutStream(char *fileName, char *openMethod){
 void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
   int i, bit = 0, temp = 0;
   
+  if(bitSize == 8){
+    out->currentByte = bitsToWrite;
+    fputc(out->currentByte, out->file);
+  }
+  else{
   if(out->size == 0){
     temp = bitsToWrite >> 4;
     temp = out->currentByte | temp;
@@ -71,6 +76,7 @@ void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
     out->size = 0;
   }
   // printf("current: %x\n", out->currentByte);
+  }
 }
 
 void streamFlush(OutStream *out){

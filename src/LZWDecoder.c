@@ -10,7 +10,8 @@
 #include <String.h>
 
 #define getIndex(x) (x - 256)
-#define bitSize     8
+#define bitWriteSize     8
+#define bitReadSize     12
 
 char *(*_getDictTranslation)(Dictionary *dict, int inputIndex) = getDictTranslation;
 
@@ -33,7 +34,7 @@ void lzwDecode(InStream *in, Dictionary *dict, OutStream *out){
   
   bitsToRead = getBitsToRead(dict);
   
-  inputCode = streamReadBits(in, (bitsToRead - 1));
+  inputCode = streamReadBits(in, bitReadSize);
   
   if(inputCode < -1 || inputCode > (dict->length + 256))
     Throw(ERR_INVALID_INDEX);
@@ -46,7 +47,7 @@ void lzwDecode(InStream *in, Dictionary *dict, OutStream *out){
   bitLimit = 1 << (bitsToRead - 1);
   
   while(inputCode != -2){
-    inputCode = streamReadBits(in, bitsToRead);
+    inputCode = streamReadBits(in, bitReadSize);
     if(inputCode == -1)
       Throw(END_OF_STREAM);
     else if(inputCode > (dict->length + 256))
@@ -139,13 +140,13 @@ void emitCode(Dictionary *dict, int inputIndex, OutStream *out){
   int i;
   
   if(inputIndex < 256 && inputIndex > 0){
-    streamWriteBits(out, inputIndex, bitSize);
+    streamWriteBits(out, inputIndex, bitWriteSize);
   }
   else if(inputIndex == 0){}//Do Nothing
   else if(inputIndex >= 256){
     translation = _getDictTranslation(dict, inputIndex);
     for(i = 0; i < strlen(translation); i++){
-      streamWriteBits(out, translation[i], bitSize);
+      streamWriteBits(out, translation[i], bitWriteSize);
     }
   }
   else{
