@@ -60,13 +60,14 @@ int streamReadBits(InStream *in, int bitSize){
     }
     else{
       inputByte = fgetc(in->file);
-      printf("inputByte = %d\n", inputByte);
+      // printf("inputByte = %d\n", inputByte);
       if(inputByte == EOF){
-        printf("EOF reached\n");
+        // printf("EOF reached\n");
         break;}
       byteToRead = inputByte;
-      printf("read Input : %x\n", inputByte);
+      // printf("read Input : %x\n", inputByte);
       // printf("bit Index : %d\n", in->bitIndex);
+      // printf("bit count : %d\n", bitCount);
     }
 
     for(i = in->bitIndex; i < 8; i++){
@@ -75,6 +76,7 @@ int streamReadBits(InStream *in, int bitSize){
       outputWhole = outputWhole | tempBitRead;
       byteToRead = byteToRead << 1;
       in->bitIndex++;
+      // printf("bit count : %d\n", bitCount);
       if(in->bitIndex == 8)
         in->bitIndex = 0;
       if(bitCount == (bitSize - 1))
@@ -83,16 +85,16 @@ int streamReadBits(InStream *in, int bitSize){
         bitCount++;
     }
     if(i == 8){
-      printf("not full output\n");
+      // printf("not full output\n");
       byteCount++;
       tempCurrentByte = 0;
-      printf("outputWhole : %x\n", outputWhole);
-      printf("bit size : %d\n", bitSize);
-      printf("bit count : %d\n", bitCount);
+      // printf("outputWhole : %x\n", outputWhole);
+      // printf("bit size : %d\n", bitSize);
+      // printf("bit count : %d\n", bitCount);
     }
     else if(bitCount == (bitSize - 1)){
       in->currentByte = byteToRead;
-      printf("full output\n");
+      // printf("full output\n");
       if(in->bitIndex != 0)
         tempCurrentByte = in->currentByte | 0x100;
       break;

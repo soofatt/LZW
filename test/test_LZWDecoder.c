@@ -73,9 +73,9 @@ void test_lzwDecode_given_code_97_should_decode_into_a(){
   OutStream out;
   InStream in;
    
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamReadBits_ExpectAndReturn(&in, 12, 97);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, -1);
+  streamReadBits_ExpectAndReturn(&in, 12, -1);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -90,13 +90,13 @@ void test_lzwDecode_given_code_98_97_110_should_decode_into_ban(){
   OutStream out;
   InStream in;
    
-  streamReadBits_ExpectAndReturn(&in, 8, 98);
+  streamReadBits_ExpectAndReturn(&in, 12, 98);
   streamWriteBits_Expect(&out, 98, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 97);
+  streamReadBits_ExpectAndReturn(&in, 12, 97);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 110);
+  streamReadBits_ExpectAndReturn(&in, 12, 110);
   streamWriteBits_Expect(&out, 110, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, -1);
+  streamReadBits_ExpectAndReturn(&in, 12, -1);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -119,20 +119,20 @@ void test_lzwDecode_case_1_should_decode_into_abcdabc(){
   OutStream out;
   InStream in;
    
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamReadBits_ExpectAndReturn(&in, 12, 97);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 98);
+  streamReadBits_ExpectAndReturn(&in, 12, 98);
   streamWriteBits_Expect(&out, 98, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 99);
+  streamReadBits_ExpectAndReturn(&in, 12, 99);
   streamWriteBits_Expect(&out, 99, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 100);
+  streamReadBits_ExpectAndReturn(&in, 12, 100);
   streamWriteBits_Expect(&out, 100, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 256);
+  streamReadBits_ExpectAndReturn(&in, 12, 256);
   streamWriteBits_Expect(&out, 97, 8);
   streamWriteBits_Expect(&out, 98, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 99);
+  streamReadBits_ExpectAndReturn(&in, 12, 99);
   streamWriteBits_Expect(&out, 99, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, -1);
+  streamReadBits_ExpectAndReturn(&in, 12, -1);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -158,18 +158,18 @@ void test_lzwDecode_case_2_should_decode_into_aaaaaaa(){
   OutStream out;
   InStream in;
    
-  streamReadBits_ExpectAndReturn(&in, 8, 97);
+  streamReadBits_ExpectAndReturn(&in, 12, 97);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 256);
-  streamWriteBits_Expect(&out, 97, 8);
-  streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 257);
+  streamReadBits_ExpectAndReturn(&in, 12, 256);
   streamWriteBits_Expect(&out, 97, 8);
   streamWriteBits_Expect(&out, 97, 8);
+  streamReadBits_ExpectAndReturn(&in, 12, 257);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 97);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, -1);
+  streamWriteBits_Expect(&out, 97, 8);
+  streamReadBits_ExpectAndReturn(&in, 12, 97);
+  streamWriteBits_Expect(&out, 97, 8);
+  streamReadBits_ExpectAndReturn(&in, 12, -1);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -193,20 +193,20 @@ void test_lzwDecode_case_3_should_decode_into_bananana(){
   OutStream out;
   InStream in;
    
-  streamReadBits_ExpectAndReturn(&in, 8, 98);
+  streamReadBits_ExpectAndReturn(&in, 12, 98);
   streamWriteBits_Expect(&out, 98, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 97);
+  streamReadBits_ExpectAndReturn(&in, 12, 97);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 110);
+  streamReadBits_ExpectAndReturn(&in, 12, 110);
   streamWriteBits_Expect(&out, 110, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 257);
-  streamWriteBits_Expect(&out, 97, 8);
-  streamWriteBits_Expect(&out, 110, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 259);
+  streamReadBits_ExpectAndReturn(&in, 12, 257);
   streamWriteBits_Expect(&out, 97, 8);
   streamWriteBits_Expect(&out, 110, 8);
+  streamReadBits_ExpectAndReturn(&in, 12, 259);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, -1);
+  streamWriteBits_Expect(&out, 110, 8);
+  streamWriteBits_Expect(&out, 97, 8);
+  streamReadBits_ExpectAndReturn(&in, 12, -1);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -231,29 +231,29 @@ void test_lzwDecode_case_4_should_decode_into_banana_nanaba(){
   OutStream out;
   InStream in;
    
-  streamReadBits_ExpectAndReturn(&in, 8, 98);
+  streamReadBits_ExpectAndReturn(&in, 12, 98);
   streamWriteBits_Expect(&out, 98, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 97);
+  streamReadBits_ExpectAndReturn(&in, 12, 97);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 110);
+  streamReadBits_ExpectAndReturn(&in, 12, 110);
   streamWriteBits_Expect(&out, 110, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 257);
+  streamReadBits_ExpectAndReturn(&in, 12, 257);
   streamWriteBits_Expect(&out, 97, 8);
   streamWriteBits_Expect(&out, 110, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 97);
+  streamReadBits_ExpectAndReturn(&in, 12, 97);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 95);
+  streamReadBits_ExpectAndReturn(&in, 12, 95);
   streamWriteBits_Expect(&out, 95, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 258);
+  streamReadBits_ExpectAndReturn(&in, 12, 258);
   streamWriteBits_Expect(&out, 110, 8);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 258);
+  streamReadBits_ExpectAndReturn(&in, 12, 258);
   streamWriteBits_Expect(&out, 110, 8);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, 256);
+  streamReadBits_ExpectAndReturn(&in, 12, 256);
   streamWriteBits_Expect(&out, 98, 8);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 9, -1);
+  streamReadBits_ExpectAndReturn(&in, 12, -1);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -282,7 +282,7 @@ void test_lzwDecode_case_5_should_throw_invalid_index_error(){
   OutStream out;
   InStream in;
    
-  streamReadBits_ExpectAndReturn(&in, 8, 4500);
+  streamReadBits_ExpectAndReturn(&in, 12, 4500);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -303,7 +303,7 @@ void test_lzwDecode_case_6_should_throw_invalid_index_error(){
   OutStream out;
   InStream in;
    
-  streamReadBits_ExpectAndReturn(&in, 8, -10);
+  streamReadBits_ExpectAndReturn(&in, 12, -10);
   
   Try{
     lzwDecode(&in, dictionary, &out);
