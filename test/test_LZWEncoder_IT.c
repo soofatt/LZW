@@ -10,47 +10,47 @@ void setUp(){}
 void tearDown(){}
 
 // lzwEncoder test//
-// void test_lzwEncoder_encode_b(){
-  // CEXCEPTION_T e;
-  // OutStream *out;
-  // InStream *in;
-  // Dictionary *dictionary = dictionaryNew(4000);
-  // currentByte = 0;
+void test_lzwEncoder_encode_b(){
+  CEXCEPTION_T e;
+  OutStream *out;
+  InStream *in;
+  Dictionary *dictionary = dictionaryNew(4000);
+  currentByte = 0;
   
-  // in = openInStream("test/Data/lzw_b.txt", "r");
-  // out = openOutStream("test/Data/lzw_b_enc.txt", "w");
+  in = openInStream("test/Data/lzw_b.txt", "r");
+  out = openOutStream("test/Data/lzw_b_enc.txt", "w");
   
-  // lzwEncoder(in, dictionary, out);
+  lzwEncoder(in, dictionary, out);
 
-// }
+}
 
-// void test_lzwEncoder_encode_banana(){
-  // CEXCEPTION_T e;
-  // OutStream *out;
-  // InStream *in;
-  // Dictionary *dictionary = dictionaryNew(4000);
-  // currentByte = 0;
+void test_lzwEncoder_encode_banana(){
+  CEXCEPTION_T e;
+  OutStream *out;
+  InStream *in;
+  Dictionary *dictionary = dictionaryNew(4000);
+  currentByte = 0;
   
-  // in = openInStream("test/Data/lzw_banana.txt", "r");
-  // out = openOutStream("test/Data/lzw_banana_enc.txt", "w");
+  in = openInStream("test/Data/lzw_banana.txt", "r");
+  out = openOutStream("test/Data/lzw_banana_enc.txt", "w");
   
 
-  // lzwEncoder(in, dictionary, out);
+  lzwEncoder(in, dictionary, out);
 
-// }
+}
 
-// void test_lzwEncoder_encode_aaaaaa(){
-  // CEXCEPTION_T e;
-  // OutStream *out;
-  // InStream *in;
-  // Dictionary *dictionary = dictionaryNew(4000);
-  // currentByte = 0;
-  // in = openInStream("test/Data/lzw_aaaaaa.txt", "r");
-  // out = openOutStream("test/Data/lzw_aaaaaa_enc.txt", "w");
+void test_lzwEncoder_encode_aaaaaa(){
+  CEXCEPTION_T e;
+  OutStream *out;
+  InStream *in;
+  Dictionary *dictionary = dictionaryNew(4000);
+  currentByte = 0;
+  in = openInStream("test/Data/lzw_aaaaaa.txt", "r");
+  out = openOutStream("test/Data/lzw_aaaaaa_enc.txt", "w");
   
-  // lzwEncoder(in, dictionary, out);
+  lzwEncoder(in, dictionary, out);
 
-// }
+}
 
 void test_lzwEncoder_encode_banana_nanaba(){
   CEXCEPTION_T e;
@@ -64,20 +64,20 @@ void test_lzwEncoder_encode_banana_nanaba(){
   lzwEncoder(in, dictionary, out);
 }
 
-// void test_lzwEncoder_to_encode_a_file(){
-  // CEXCEPTION_T e;
-  // OutStream *out;
-  // InStream *in;
-  // Dictionary *dictionary = dictionaryNew(4000);
-  // currentByte = 0;
-  // in = openInStream("test/Data/LZW_Encode_Test_Input.txt", "r");
-  // out = openOutStream("test/Data/LZW_Encode_Test_Output.txt", "w");
+void test_lzwEncoder_to_encode_a_file(){
+  CEXCEPTION_T e;
+  OutStream *out;
+  InStream *in;
+  Dictionary *dictionary = dictionaryNew(4000);
+  currentByte = 0;
+  in = openInStream("test/Data/LZW_Encode_Test_Input.txt", "r");
+  out = openOutStream("test/Data/LZW_Encode_Test_Output.txt", "w");
 
-  // lzwEncoder(in, dictionary, out);
+  lzwEncoder(in, dictionary, out);
   
-  // closeInStream(in);
-  // closeOutStream(out);
-// }
+  closeInStream(in);
+  closeOutStream(out);
+}
 
 void test_lzwEncoder_encode_ban(){
   CEXCEPTION_T e;
@@ -98,7 +98,7 @@ void test_lzwEncoder_encode_bananana(){
   currentByte = 0;
   in = openInStream("test/Data/LZWDecodeOutput_6.txt", "r");
   out = openOutStream("test/Data/LZWDecodeOutput_6_enc.txt", "w");
-  printf("aa");
+ 
   lzwEncoder(in, dictionary, out);
 }
 

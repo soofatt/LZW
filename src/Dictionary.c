@@ -38,7 +38,7 @@ char *codeNewAndAppend(char *oldCode, char codeToAppend){
 	char *newCode = malloc((strlen(oldCode)) + 1 + 1); 
 	int codeLen = strlen(oldCode);
 	
-	newCode = strcpy(newCode, oldCode);
+	newCode = memcpy(newCode, oldCode, codeLen);
 	
 	newCode[codeLen] = codeToAppend;
 	newCode[codeLen+1] = '\0';

@@ -37,18 +37,19 @@ OutStream *openOutStream(char *fileName, char *openMethod){
 void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
   int i, bit = 0, temp = 0;
   
-  if(bitSize != 8){
-    out->size++;
-    temp = bitsToWrite >> out->size;
-  printf("temp: %x\n", temp);
-  printf("bits: %x\n", bitsToWrite);
-  printf("out: %x\n", out->size);
-  printf("current before: %x\n", out->currentByte);
+  if(out->size == 0){
+    temp = bitsToWrite >> 4;
     temp = out->currentByte | temp;
   }
-  else
-    temp = bitsToWrite;
-  
+  else{
+    temp = bitsToWrite >> 8;
+    temp = out->currentByte | temp;
+  }
+  // printf("temp: %x\n", temp);
+  // printf("bits: %x\n", bitsToWrite);
+  // printf("out: %x\n", out->size);
+  // printf("current before: %x\n", out->currentByte);
+
   for(i = 0 ; i < 8 ; i++){
 
     out->currentByte = out->currentByte << 1;
@@ -58,21 +59,18 @@ void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
   }
   fputc(out->currentByte, out->file);
   printf("write: %x\n", out->currentByte);
-  if(bitSize != 8){   
-    if(out->size > 8){
-      out->currentByte = bitsToWrite >> 1;
-      streamFlush(out);
-      out->currentByte = bitsToWrite << 7;
-      out->size = 1;
-      printf("flush");
-    }
-    else {
-      out->currentByte = bitsToWrite <<  (8 - out->size);
-  printf("current: %x\n", out->currentByte);
-    }
-  }  
-  else
+  
+  if(out->size == 0){
+    out->currentByte = bitsToWrite << 4;
+    out->size = 1;
+  }
+  else{
     out->currentByte = bitsToWrite << 8;
+      printf("flush\n");
+    streamFlush(out);
+    out->size = 0;
+  }
+  // printf("current: %x\n", out->currentByte);
 }
 
 void streamFlush(OutStream *out){

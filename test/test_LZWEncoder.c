@@ -18,16 +18,16 @@ void test_lzwEncoder_encode_banana(){
   
   streamReadBits_ExpectAndReturn(&in, 8, 98);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 98, 8);
+  streamWriteBits_Expect(&out, 98, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 110);
-  streamWriteBits_Expect(&out, 97, 9);
+  streamWriteBits_Expect(&out, 97, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 110, 9);
+  streamWriteBits_Expect(&out, 110, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 257, 9);
+  streamWriteBits_Expect(&out, 257, 12);
   streamReadBits_ExpectAndReturn(&in, 8, -1);
-  streamWriteBits_Expect(&out, 97, 9);
+  streamWriteBits_Expect(&out, 97, 12);
   streamReadBits_ExpectAndThrow(&in, 8, -1);
   
   Try{
@@ -49,14 +49,14 @@ void test_lzwEncoder_encode_aaaaaa(){
 
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 97, 8);
+  streamWriteBits_Expect(&out, 97, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 256, 9);
+  streamWriteBits_Expect(&out, 256, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, -1);
-  streamWriteBits_Expect(&out, 257, 9);
+  streamWriteBits_Expect(&out, 257, 12);
   streamReadBits_ExpectAndThrow(&in, 8, -1);
   
   Try{
@@ -76,27 +76,27 @@ void test_lzwEncoder_encode_banana_nanaba(){
 
   streamReadBits_ExpectAndReturn(&in, 8, 98);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 98, 8);
+  streamWriteBits_Expect(&out, 98, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 110);
-  streamWriteBits_Expect(&out, 97, 9);
+  streamWriteBits_Expect(&out, 97, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 110, 9);
+  streamWriteBits_Expect(&out, 110, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamWriteBits_Expect(&out, 257, 9);
+  streamWriteBits_Expect(&out, 257, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 95);
-  streamWriteBits_Expect(&out, 97, 9);
+  streamWriteBits_Expect(&out, 97, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 110);  
-  streamWriteBits_Expect(&out, 95, 9);
+  streamWriteBits_Expect(&out, 95, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 110);
-  streamWriteBits_Expect(&out, 258, 9);
+  streamWriteBits_Expect(&out, 258, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 98);
-  streamWriteBits_Expect(&out, 258, 9);
+  streamWriteBits_Expect(&out, 258, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, -1);
-  streamWriteBits_Expect(&out, 256, 9);
+  streamWriteBits_Expect(&out, 256, 12);
   streamReadBits_ExpectAndThrow(&in, 8, -1);
   
   Try{

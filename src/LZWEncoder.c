@@ -19,12 +19,12 @@ unsigned char currentByte;
 *        -dictionary: the dictionary
 */
 void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
-  int dictIndex = 256, bitSize = 8, marker = 256, result;
+  int dictIndex = 256, bitSize = 12, marker = 256, result;
   char *code;
   dictionaryEntryInitializer(dictionary);
 
   while(1){
-  printf("while start\n");
+  // printf("while start\n");
     code = dictionaryFindLongestMatchingEntry(in, dictionary)->code;
 
     /*
@@ -34,15 +34,12 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
     if(dictionaryAdd(dictionary, codeNewAndAppend(code, currentByte), dictIndex) == 1){
 
       result = getIntFromChar(dictionary, code);
-      printf("result%x\n", result);
-      printf("WRITINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\n");
+      // printf("result%x\n", result);
+      // printf("WRITINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\n");
       streamWriteBits(out, result, bitSize);
-      printf("WRITINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\n");
+      // printf("WRITINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\n");
       //condition to add bitSize
-      if(dictIndex == marker){
-        marker = marker * 2;
-        bitSize++;
-      }
+
      //end
      if(in->byteIndex == -1){
         printf("end\n");
@@ -51,9 +48,7 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
       }
       dictIndex++;
     }
-    else
-        printf("did not enter\n");
-    printf("while end\n");
+
 
   }
 }
