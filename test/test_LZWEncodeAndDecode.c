@@ -15,7 +15,7 @@ void test_lzwEncoder_to_encode_a_file(){
   CEXCEPTION_T e;
   OutStream *out;
   InStream *in;
-  Dictionary *dictionary = dictionaryNew(4000);
+  Dictionary *dictionary = dictionaryNew(16384);
   currentByte = 0;
   in = openInStream("test/Data/LZW_Encode_Test_Input.txt", "r");
   out = openOutStream("test/Data/LZW_Encode_Test_Output.txt", "w");
@@ -30,9 +30,9 @@ void test_lzwDecoder_to_decode_a_file(){
   CEXCEPTION_T e;
   OutStream *out;
   InStream *in;
-  Dictionary *dictionary = dictionaryNew(4000);
+  Dictionary *dictionary = dictionaryNew(16384);
   
-  in = openInStream("test/Data/LZW_Encode_Test_Output.txt", "r");
+  in = openInStream("test/Data/LZW_Encode_Test_Output.txt", "rb");
   out = openOutStream("test/Data/LZW_Decode_Test_Output.txt", "w");
 
   Try{
