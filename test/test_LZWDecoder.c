@@ -282,7 +282,7 @@ void test_lzwDecode_case_5_should_throw_invalid_index_error(){
   OutStream out;
   InStream in;
    
-  streamReadBits_ExpectAndReturn(&in, 8, 4096);
+  streamReadBits_ExpectAndReturn(&in, 8, 4500);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -292,7 +292,7 @@ void test_lzwDecode_case_5_should_throw_invalid_index_error(){
 }
 
 /*
- * Input : -1
+ * Input : -10
  *
  * Output : Should throw
  *
@@ -303,7 +303,7 @@ void test_lzwDecode_case_6_should_throw_invalid_index_error(){
   OutStream out;
   InStream in;
    
-  streamReadBits_ExpectAndReturn(&in, 8, -1);
+  streamReadBits_ExpectAndReturn(&in, 8, -10);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -312,12 +312,22 @@ void test_lzwDecode_case_6_should_throw_invalid_index_error(){
   }
 }
 
-void test_getAsciiTranslation_given_ASCII_a_in_integer_should_return_char_a(){
-	char result;
+void test_getDictTranslation_given_97_should_return_a(){
+	Dictionary *dictionary = dictionaryNew(100);
+  char *result;
 	
-	result = getAsciiTranslation(97);
+	result = getDictTranslation(dictionary, 97);
 	
-	TEST_ASSERT_EQUAL('a', result);
+	TEST_ASSERT_EQUAL_STRING("a", result);
+}
+
+void test_getDictTranslation_given_110_should_return_n(){
+	Dictionary *dictionary = dictionaryNew(100);
+  char *result;
+	
+	result = getDictTranslation(dictionary, 110);
+	
+	TEST_ASSERT_EQUAL_STRING("n", result);
 }
 
 void test_getDictTranslation_given_256_index_0_with_ba_in_index_0_should_return_ba(){

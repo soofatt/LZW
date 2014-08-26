@@ -4,6 +4,7 @@
 #include "OutStream.h"
 #include "LZWDecoder.h"
 #include "ErrorCode.h"
+#include "Utils.h"
 #include <stdio.h>
 #include <malloc.h>
 #include <String.h>
@@ -34,26 +35,26 @@ void lzwDecode(InStream *in, Dictionary *dict, OutStream *out){
   
   inputCode = streamReadBits(in, (bitsToRead - 1));
   
-  if(inputCode >= dict->length || inputCode < 0)
+  if(inputCode < -1 || inputCode > (dict->length + 256))
     Throw(ERR_INVALID_INDEX);
+  else if(inputCode == -1)
+    printf("EOF?\n");
     
   emitCode(dict, inputCode, out);
-  translation = codeNewAndAppend("", getAsciiTranslation(inputCode));
+  translation = _getDictTranslation(dict, inputCode);
   currentString = translation;
   bitLimit = 1 << (bitsToRead - 1);
   
-  while(inputCode != -1){
+  while(inputCode != -2){
     inputCode = streamReadBits(in, bitsToRead);
-    if(inputCode < 256 && inputCode >= 0)
-      translation = codeNewAndAppend("", getAsciiTranslation(inputCode));
-    else if(inputCode >= 256)
-      translation = _getDictTranslation(dict, inputCode);
-    else if(inputCode == -1)
+    if(inputCode == -1)
       Throw(END_OF_STREAM);
-    else
+    else if(inputCode > (dict->length + 256))
       Throw(ERR_INVALID_INDEX);
+      
+    translation = _getDictTranslation(dict, inputCode);
     
-    if(translation == NULL)
+    if(translation == NULL)//To deal with missing dictionary entry
       translation = codeNewAndAppend(currentString, currentString[0]);
     else{}//Do nothing
     
@@ -108,31 +109,18 @@ int getBitsToRead(Dictionary *dict){
  */
 char *getDictTranslation(Dictionary *dict, int inputIndex){
   char *translation = "";
-  int index = getIndex(inputIndex);//To find the corresponding index for the custom dictionary
-
-  if((dict->length) < index)
+  int index;
+  
+  if(inputIndex >= 0 && inputIndex < 256)
+    translation = codeNewAndAppend("", (uint8)inputIndex);
+  else if(inputIndex > 255){
+    index = getIndex(inputIndex);//To find the corresponding index for the custom dictionary
+    translation = dict->entries[index].code;
+  }
+  else if(inputIndex > (dict->length + 256))
     Throw(ERR_EXCEEDING_DICTIONARY_SIZE);
-
-  translation = dict->entries[index].code;
   
   return translation;
-}
-
-/*To find the translation of a given code if it is within the ASCII table (0 - 255)
- *
- *Input: inputIndex -> input code.
- *
- *Output:asciiTranslation -> the translation of the input code.
- *
- *Throw:  -
- *
- */
-char getAsciiTranslation(int inputIndex){
-	char asciiTranslation;
-	
-	asciiTranslation = inputIndex;
-	
-	return asciiTranslation;
 }
 
 /*To find the translation of a given code and output through streamWriteBits function.
