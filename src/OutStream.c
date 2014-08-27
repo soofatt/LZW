@@ -63,16 +63,17 @@ void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
 
   }
   fputc(out->currentByte, out->file);
-  printf("write: %x\n", out->currentByte);
+  // printf("write: %x\n", out->currentByte);
   
   if(out->size == 0){
     out->currentByte = bitsToWrite << 4;
     out->size = 1;
   }
   else{
-    out->currentByte = bitsToWrite << 8;
-      printf("flush\n");
+    out->currentByte = bitsToWrite;
     streamFlush(out);
+    out->currentByte = bitsToWrite << 8;
+      // printf("flush\n");
     out->size = 0;
   }
   // printf("current: %x\n", out->currentByte);

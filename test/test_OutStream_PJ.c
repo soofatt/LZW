@@ -63,7 +63,7 @@ void test_streamWriteBits_write_ba(){
   result = streamReadBits(in, 8);
   TEST_ASSERT_EQUAL(32, result);  
   result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL(0, result);
+  TEST_ASSERT_EQUAL(97, result);
   closeInStream(in);
 
 }
@@ -140,7 +140,7 @@ void test_streamWriteBits_write_12_characters(){
   result = streamReadBits(in, 8);
   TEST_ASSERT_EQUAL(49, result);
   result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL(7, result);  
+  TEST_ASSERT_EQUAL(4, result);  
   result = streamReadBits(in, 8);
   TEST_ASSERT_EQUAL(16, result);  
   result = streamReadBits(in, 8);
@@ -156,9 +156,9 @@ void test_streamWriteBits_write_12_characters(){
   result = streamReadBits(in, 8);
   TEST_ASSERT_EQUAL(16, result);
   result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL(145, result);  
+  TEST_ASSERT_EQUAL(144, result);  
   result = streamReadBits(in, 8);
-  TEST_ASSERT_EQUAL(10, result);
+  TEST_ASSERT_EQUAL(0, result);
   closeInStream(in);
   
 }

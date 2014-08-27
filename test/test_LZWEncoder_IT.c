@@ -79,7 +79,7 @@ void xtest_lzwEncoder_encode_banana_nanaba(){
   // closeOutStream(out);
 // }
 
-void xtest_lzwEncoder_encode_ban(){
+void test_lzwEncoder_encode_ban(){
   CEXCEPTION_T e;
   OutStream *out;
   InStream *in;
@@ -90,7 +90,7 @@ void xtest_lzwEncoder_encode_ban(){
   lzwEncoder(in, dictionary, out);
 }
 
-void xtest_lzwEncoder_encode_bananana(){
+void test_lzwEncoder_encode_bananana(){
   CEXCEPTION_T e;
   OutStream *out;
   InStream *in;

@@ -26,7 +26,7 @@ void test_lzwEncoder_to_encode_a_file(){
   closeOutStream(out);
 }
 
-void test_lzwDecoder_to_decode_a_file(){
+void xtest_lzwDecoder_to_decode_a_file(){
   CEXCEPTION_T e;
   OutStream *out;
   InStream *in;

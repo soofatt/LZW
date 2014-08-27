@@ -19,7 +19,7 @@ unsigned char currentByte;
 *        -dictionary: the dictionary
 */
 void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
-  int dictIndex = 256, bitSize = 12, marker = 256, result;
+  int dictIndex = 256, bitSize = 12, result;
   char *code;
   dictionaryEntryInitializer(dictionary);
 
@@ -42,13 +42,16 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
 
      //end
      if(in->byteIndex == -1){
-        printf("end\n");
+        // printf("end\n");
         streamWriteBits(out, 0, bitSize);
         break;
       }
       dictIndex++;
     }
-
+    else{
+      dictionaryDel(dictionary);
+      dictionaryEntryInitializer(dictionary);
+    }
 
   }
 }

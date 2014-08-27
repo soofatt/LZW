@@ -154,7 +154,7 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
           
           //if byte is -1, end
           if(byte == -1){
-            printf("-1\n");
+            // printf("-1\n");
            return &dictionary->entries[markIndex];
           }
           //save byte in currentByte global variable
