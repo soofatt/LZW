@@ -38,8 +38,8 @@ void tearDown(void){}
 void test_lzwDecode_given_code_97_should_decode_into_a(){
   CEXCEPTION_T e;
   Dictionary *dictionary = dictionaryNew(100);
-  OutStream *out = openOutStream("test/data/LZWDecodeOutput_1.txt", "w");
-  InStream *in = openInStream("test/data/LZWDecodeInput_1.txt", "r");
+  OutStream *out = openOutStream("test/data/LZWDecodeOutput_1.txt", "wb");
+  InStream *in = openInStream("test/data/LZWDecodeInput_1.txt", "rb");
   
   Try{
     lzwDecode(in, dictionary, out);
@@ -62,8 +62,8 @@ void test_lzwDecode_given_code_97_should_decode_into_a(){
 void test_lzwDecode_given_code_98_97_should_decode_into_ba(){
   CEXCEPTION_T e;
   Dictionary *dictionary = dictionaryNew(100);
-  OutStream *out = openOutStream("test/data/LZWDecodeOutput_2.txt", "w");
-  InStream *in = openInStream("test/data/LZWDecodeInput_2.txt", "r");
+  OutStream *out = openOutStream("test/data/LZWDecodeOutput_2.txt", "wb");
+  InStream *in = openInStream("test/data/LZWDecodeInput_2.txt", "rb");
   
   Try{
     lzwDecode(in, dictionary, out);
@@ -86,8 +86,8 @@ void test_lzwDecode_given_code_98_97_should_decode_into_ba(){
 void test_lzwDecode_given_code_98_97_110_should_decode_into_ban(){
   CEXCEPTION_T e;
   Dictionary *dictionary = dictionaryNew(100);
-  OutStream *out = openOutStream("test/data/LZWDecodeOutput_3.txt", "w");
-  InStream *in = openInStream("test/data/LZWDecodeInput_3.txt", "r");
+  OutStream *out = openOutStream("test/data/LZWDecodeOutput_3.txt", "wb");
+  InStream *in = openInStream("test/data/LZWDecodeInput_3.txt", "rb");
   
   Try{
     lzwDecode(in, dictionary, out);
@@ -121,8 +121,8 @@ void test_lzwDecode_given_code_98_97_110_should_decode_into_ban(){
 void test_lzwDecode_case_1_should_decode_into_abcdabc(){
   CEXCEPTION_T e;
   Dictionary *dictionary = dictionaryNew(4096);
-  OutStream *out = openOutStream("test/data/LZWDecodeOutput_4.txt", "w");
-  InStream *in = openInStream("test/data/LZWDecodeInput_4.txt", "r");
+  OutStream *out = openOutStream("test/data/LZWDecodeOutput_4.txt", "wb");
+  InStream *in = openInStream("test/data/LZWDecodeInput_4.txt", "rb");
   
   Try{
     lzwDecode(in, dictionary, out);
@@ -159,8 +159,8 @@ void test_lzwDecode_case_1_should_decode_into_abcdabc(){
 void test_lzwDecode_case_2_should_decode_into_aaaaaaa(){
   CEXCEPTION_T e;
   Dictionary *dictionary = dictionaryNew(4096);
-  OutStream *out = openOutStream("test/data/LZWDecodeOutput_5.txt", "w");
-  InStream *in = openInStream("test/data/LZWDecodeInput_5.txt", "r");
+  OutStream *out = openOutStream("test/data/LZWDecodeOutput_5.txt", "wb");
+  InStream *in = openInStream("test/data/LZWDecodeInput_5.txt", "rb");
   
   Try{
     lzwDecode(in, dictionary, out);
@@ -195,8 +195,8 @@ void test_lzwDecode_case_2_should_decode_into_aaaaaaa(){
 void test_lzwDecode_case_3_should_decode_into_bananana(){
   CEXCEPTION_T e;
   Dictionary *dictionary = dictionaryNew(4096);
-  OutStream *out = openOutStream("test/data/LZWDecodeOutput_6.txt", "w");
-  InStream *in = openInStream("test/data/LZWDecodeInput_6.txt", "r");
+  OutStream *out = openOutStream("test/data/LZWDecodeOutput_6.txt", "wb");
+  InStream *in = openInStream("test/data/LZWDecodeInput_6.txt", "rb");
   
   Try{
     lzwDecode(in, dictionary, out);
@@ -232,8 +232,8 @@ void test_lzwDecode_case_3_should_decode_into_bananana(){
 void test_lzwDecode_case_4_should_decode_into_banana_nanaba(){
   CEXCEPTION_T e;
   Dictionary *dictionary = dictionaryNew(4096);
-  OutStream *out = openOutStream("test/data/LZWDecodeOutput_7.txt", "w");
-  InStream *in = openInStream("test/data/LZWDecodeInput_7.txt", "r");
+  OutStream *out = openOutStream("test/data/LZWDecodeOutput_7.txt", "wb");
+  InStream *in = openInStream("test/data/LZWDecodeInput_7.txt", "rb");
   
   Try{
     lzwDecode(in, dictionary, out);

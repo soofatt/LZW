@@ -118,8 +118,8 @@ char *getDictTranslation(Dictionary *dict, int inputIndex){
     index = getIndex(inputIndex);//To find the corresponding index for the custom dictionary
     translation = dict->entries[index].code;
   }
-  else if(inputIndex > (dict->length + 256))
-    Throw(ERR_EXCEEDING_DICTIONARY_SIZE);
+  // else if(inputIndex > (dict->length + 256))
+    // Throw(ERR_EXCEEDING_DICTIONARY_SIZE);
   
   return translation;
 }
