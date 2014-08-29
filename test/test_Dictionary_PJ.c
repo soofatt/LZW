@@ -67,6 +67,26 @@ void test_dictionaryAdd_exceed_length_should_return_0(){
 }
 
 //dictionaryFindLongestMatchingentry test//
+void test_dictionaryFindLongestMatchingEntry_find_entry_255(){
+
+  Dictionary *dictionary = dictionaryNew(4000);
+  DictionaryEntry *result;
+  InStream *in;
+  currentByte = 0;
+  
+  dictionaryEntryInitializer(dictionary);
+
+  streamReadBits_ExpectAndReturn(in, 8, 255);
+  streamReadBits_ExpectAndReturn(in, 8, 97);
+
+
+  result = dictionaryFindLongestMatchingEntry(in, dictionary);
+
+  TEST_ASSERT_EQUAL(255, result->code[0]);
+
+
+}
+
 void test_dictionaryFindLongestMatchingEntry_find_entry_abc(){
 
   Dictionary *dictionary = dictionaryNew(4000);
@@ -307,12 +327,13 @@ void test_dictionaryEntryInitializer_initialize_ASCII(){
   Dictionary *dictionary = dictionaryNew(4000);
 
   dictionaryEntryInitializer(dictionary);
-
+  
   TEST_ASSERT_EQUAL('a', dictionary->entries[97].code[0]);
   TEST_ASSERT_EQUAL('b', dictionary->entries[98].code[0]);
   TEST_ASSERT_EQUAL('c', dictionary->entries[99].code[0]);
   TEST_ASSERT_EQUAL('d', dictionary->entries[100].code[0]);
-  TEST_ASSERT_EQUAL('_', dictionary->entries[95].code[0]);
+  TEST_ASSERT_EQUAL('_', dictionary->entries[95].code[0]);  
+  TEST_ASSERT_EQUAL(128, dictionary->entries[128].code[0]);
 
 }
 

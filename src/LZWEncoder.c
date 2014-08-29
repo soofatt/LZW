@@ -19,7 +19,7 @@ unsigned char currentByte;
 *        -dictionary: the dictionary
 */
 void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
-  int dictIndex = 256, bitSize = 12, result;
+  unsigned int dictIndex = 256, bitSize = 12, result;
   char *code;
   dictionaryEntryInitializer(dictionary);
 
@@ -34,6 +34,7 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
     if(dictionaryAdd(dictionary, codeNewAndAppend(code, currentByte), dictIndex) == 1){
 
       result = getIntFromChar(dictionary, code);
+      // printf("%x", result);
       // printf("result%x\n", result);
       // printf("WRITINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\n");
       streamWriteBits(out, result, bitSize);
@@ -66,7 +67,7 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
 *         -   i: the dictionary index that contains the entry that matches the input code
 */
 int getIntFromChar(Dictionary *dict, char *code){
-  int byte, i;
+  unsigned int byte, i;
 
  if(strlen(code) == 1){
     byte = code[0];

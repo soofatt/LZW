@@ -3,6 +3,7 @@
 #include "LZWEncoder.h"
 #include "CException.h"
 #include "InStream.h"
+#include "ErrorCode.h"
 #include "OutStream.h"
 #include "Dictionary.h"
 unsigned char currentByte;
@@ -10,7 +11,7 @@ void setUp(){}
 void tearDown(){}
 
 // lzwEncoder test//
-void xtest_lzwEncoder_encode_b(){
+void test_lzwEncoder_encode_b(){
   CEXCEPTION_T e;
   OutStream *out;
   InStream *in;
@@ -24,7 +25,7 @@ void xtest_lzwEncoder_encode_b(){
 
 }
 
-void xtest_lzwEncoder_encode_banana(){
+void test_lzwEncoder_encode_banana(){
   CEXCEPTION_T e;
   OutStream *out;
   InStream *in;
@@ -39,7 +40,7 @@ void xtest_lzwEncoder_encode_banana(){
 
 }
 
-void xtest_lzwEncoder_encode_aaaaaa(){
+void test_lzwEncoder_encode_aaaaaa(){
   CEXCEPTION_T e;
   OutStream *out;
   InStream *in;
@@ -52,7 +53,7 @@ void xtest_lzwEncoder_encode_aaaaaa(){
 
 }
 
-void xtest_lzwEncoder_encode_banana_nanaba(){
+void test_lzwEncoder_encode_banana_nanaba(){
   CEXCEPTION_T e;
   OutStream *out;
   InStream *in;
@@ -98,6 +99,22 @@ void test_lzwEncoder_encode_bananana(){
   currentByte = 0;
   in = openInStream("test/Data/LZWDecodeOutput_6.txt", "rb");
   out = openOutStream("test/Data/LZWDecodeOutput_6_enc.txt", "wb");
+ 
+  lzwEncoder(in, dictionary, out);
+}
+
+void test_lzwEncoder_encode_246(){
+  CEXCEPTION_T e;
+  OutStream *out;
+  InStream *in;
+  Dictionary *dictionary = dictionaryNew(4000);
+  currentByte = 0;
+    Try{
+  in = openInStream("test/Data/LZW_encode_246.txt", "rb");
+    }Catch(e){
+    TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
+  }
+  out = openOutStream("test/Data/LZW_encode_246_enc.txt", "wb");
  
   lzwEncoder(in, dictionary, out);
 }

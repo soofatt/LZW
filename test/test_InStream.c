@@ -35,6 +35,22 @@ void test_openInStream_given_existant_file_should_read_a(){
   TEST_ASSERT_EQUAL('a', result);
 }
 
+void test_openInStream_given_existant_file_should_read_246(){
+	CEXCEPTION_T e;
+  InStream *in;
+  int result;
+
+  Try{
+    in = openInStream("test/data/read_test_246.txt", "r");
+    result = fgetc(in->file);
+    closeInStream(in);
+  }Catch(e){
+    TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
+  }
+
+  TEST_ASSERT_EQUAL(246, result);
+}
+
 void test_openInStream_given_existant_file_should_read_6(){
 	CEXCEPTION_T e;
   InStream *in;
@@ -49,6 +65,31 @@ void test_openInStream_given_existant_file_should_read_6(){
   }
 
   TEST_ASSERT_EQUAL('6', result);
+}
+
+void test_streamReadBits_given_246_should_return_a(){
+	CEXCEPTION_T e;
+  InStream *in;
+  int result;
+  tempCurrentByte = 0;
+  Try{
+    in = openInStream("test/data/read_test_246.txt", "r");
+  }Catch(e){
+    TEST_ASSERT_EQUAL(ERR_CANNOT_OPEN_FILE, e);
+  }
+  
+  Try{
+    result = streamReadBits(in, 12);
+  }Catch(e){
+    TEST_ASSERT_EQUAL(END_OF_STREAM, e);
+  }
+  
+  TEST_ASSERT_EQUAL(0, in->bitIndex);
+  TEST_ASSERT_EQUAL(0, in->currentByte);
+  
+  closeInStream(in);
+
+  TEST_ASSERT_EQUAL(246, result);
 }
 
 void test_streamReadBits_given_a_0x06_0x10_should_return_a(){

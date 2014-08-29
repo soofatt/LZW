@@ -36,7 +36,9 @@ OutStream *openOutStream(char *fileName, char *openMethod){
 */
 void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
   int i, bit = 0, temp = 0;
-  
+  if(bitsToWrite < 256){
+    bitsToWrite = bitsToWrite & 0xf0ff;
+    }
   if(bitSize == 8){
     out->currentByte = bitsToWrite;
     fputc(out->currentByte, out->file);

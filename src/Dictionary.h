@@ -6,7 +6,7 @@
 extern unsigned char currentByte;
 
 typedef struct {
-	char *code;
+	unsigned char *code;
 	int length;
 }DictionaryEntry;
 

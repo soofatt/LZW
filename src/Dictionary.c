@@ -39,7 +39,6 @@ char *codeNewAndAppend(char *oldCode, char codeToAppend){
 	int codeLen = strlen(oldCode);
 	
 	newCode = memcpy(newCode, oldCode, codeLen);
-	
 	newCode[codeLen] = codeToAppend;
 	newCode[codeLen+1] = '\0';
 	
@@ -146,7 +145,7 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
           
           //after marking longest index, read a byte
           byte = streamReadBits(in, 8);
-          
+
           //solution to problem: streamReadBits will read null before reading -1, therefore encoder will write an extra byte
           if(byte == 0){
             byte = streamReadBits(in, 8);
@@ -206,8 +205,9 @@ int isBlockSame(char *source, char *source2, int byteSize){
 * output: -i: the dictionary index with the code that matches with the input byte
 */
 int firstMarkIndex(Dictionary *dictionary, int byte){
-  int i;
-
+  int i, code;
+  // code = dictionary->entries[128].code[0];
+  // printf("%d", code);
   for(i = 0 ; i < 256 ; i++){
 
     if(byte == dictionary->entries[i].code[0])
@@ -218,7 +218,7 @@ int firstMarkIndex(Dictionary *dictionary, int byte){
 //to initialize ASCII into dictionary
 void dictionaryEntryInitializer(Dictionary *dictionary){
   int i;
-
+  
   for(i = 0 ; i < 256 ; i++){
     dictionary->entries[i].code = codeNewAndAppend("", i);
     dictionary->entries[i].length = 1;
