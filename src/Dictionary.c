@@ -83,11 +83,13 @@ void dictionaryDel(Dictionary *dict){
 	int i;
 	
 	for(i = 0; i < dict->length; i++){
-		if(dict->entries[i].code != NULL)
-      free(dict->entries[i].code);
+		if(dict->entries[i].code != NULL){
+      dict->entries[i].code = NULL;
+    }
 	}
   
-  free(dict);
+      // printf("%d", dict->entries[5].code[20]);
+  // free(dict);
 }
 
 /*
@@ -99,7 +101,7 @@ void dictionaryDel(Dictionary *dict){
 * output: -&dictionary->entries[markIndex]: the longest matching entry
 */
 DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *dictionary){
-  int byte, index, markIndex, longestCode = 0, k = 0;
+  int byte = 0, index = 0, markIndex = 0, longestCode = 0, k = 0;
   /*
   * check if in->currentbyte is 0
   *  0: byte will get value from file

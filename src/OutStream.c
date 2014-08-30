@@ -36,6 +36,8 @@ OutStream *openOutStream(char *fileName, char *openMethod){
 */
 void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
   int i, bit = 0, temp = 0;
+  
+  //to remove 0xf from -128
   if(bitsToWrite < 256){
     bitsToWrite = bitsToWrite & 0xf0ff;
     }

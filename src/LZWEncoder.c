@@ -21,12 +21,15 @@ unsigned char currentByte;
 void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
   unsigned int dictIndex = 256, bitSize = 12, result;
   char *code;
+
   dictionaryEntryInitializer(dictionary);
 
   while(1){
   // printf("while start\n");
+  
     code = dictionaryFindLongestMatchingEntry(in, dictionary)->code;
 
+// printf("%s\n", code);
     /*
     * append currentByte to the marked code passed in from dictionaryFindLongestMatchingEntry then add it into dictionary
     * utilizes getIntFromChar to dig through the dictionary to obtain the correct index to be written
@@ -50,8 +53,28 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
       dictIndex++;
     }
     else{
+
       dictionaryDel(dictionary);
+      dictIndex = 256;
       dictionaryEntryInitializer(dictionary);
+     
+      // printf("%c\n", currentByte);
+      // printf("%s", code);
+      dictionary->entries[256].code = code;
+      dictIndex++;
+      if(dictionaryAdd(dictionary, codeNewAndAppend(code, currentByte), dictIndex) == 1){          
+        // printf("%s", code);
+    
+        result = getIntFromChar(dictionary, code);
+        streamWriteBits(out, result, bitSize);
+
+        if(in->byteIndex == -1){
+          streamWriteBits(out, 0, bitSize);
+      // printf("%s", dictionary->entries[256].code);
+          break;
+        }
+          dictIndex++;
+      }
     }
 
   }

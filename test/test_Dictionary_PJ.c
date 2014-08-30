@@ -61,7 +61,7 @@ void test_dictionaryAdd_should_add_aba(){
 void test_dictionaryAdd_exceed_length_should_return_0(){
   Dictionary *dictionary = dictionaryNew(2);
   char *shouldAdd = "aba";
-  int index = 3;
+  int index = 2;
 
   TEST_ASSERT_EQUAL(0, dictionaryAdd(dictionary, shouldAdd, index));
 }
