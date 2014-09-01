@@ -1,5 +1,6 @@
 #include "LZWEncoder.h"
 #include "CException.h"
+#include "ErrorCode.h"
 #include "unity.h"
 #include "mock_InStream.h"
 #include "mock_OutStream.h"
@@ -26,9 +27,9 @@ void test_lzwEncoder_encode_banana(){
   streamReadBits_ExpectAndReturn(&in, 8, 110);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamWriteBits_Expect(&out, 257, 12);
-  streamReadBits_ExpectAndReturn(&in, 8, -1);
+  streamReadBits_ExpectAndThrow(&in, 8, END_OF_STREAM);
   streamWriteBits_Expect(&out, 97, 12);
-  streamReadBits_ExpectAndThrow(&in, 8, -1);
+  streamWriteBits_Expect(&out, 0, 12);
   
   Try{
     lzwEncoder(&in, dictionary, &out);
@@ -55,9 +56,9 @@ void test_lzwEncoder_encode_aaaaaa(){
   streamWriteBits_Expect(&out, 256, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamReadBits_ExpectAndReturn(&in, 8, -1);
+  streamReadBits_ExpectAndThrow(&in, 8, END_OF_STREAM);
   streamWriteBits_Expect(&out, 257, 12);
-  streamReadBits_ExpectAndThrow(&in, 8, -1);
+  streamWriteBits_Expect(&out, 0, 12);
   
   Try{
     lzwEncoder(&in, dictionary, &out);
@@ -95,9 +96,9 @@ void test_lzwEncoder_encode_banana_nanaba(){
   streamReadBits_ExpectAndReturn(&in, 8, 98);
   streamWriteBits_Expect(&out, 258, 12);
   streamReadBits_ExpectAndReturn(&in, 8, 97);
-  streamReadBits_ExpectAndReturn(&in, 8, -1);
+  streamReadBits_ExpectAndThrow(&in, 8, END_OF_STREAM);
   streamWriteBits_Expect(&out, 256, 12);
-  streamReadBits_ExpectAndThrow(&in, 8, -1);
+  streamWriteBits_Expect(&out, 0, 12);
   
   Try{
     lzwEncoder(&in, dictionary, &out);

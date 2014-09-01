@@ -9,9 +9,6 @@
 unsigned char currentByte;
 
 /*
-* dictIndex and marker is used to determine if bitsToWrite should increase to x bits
-* eg. when dictionary index > 255, bitsToWrite should be 9 bits
-*
 * the code utilizes byteIndex to stop encoding
 *
 * input: -        in: InStream pointer
@@ -25,10 +22,8 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
   dictionaryEntryInitializer(dictionary);
 
   while(1){
-  // printf("while start\n");
     if(dictIndex == 4096){
-          streamWriteBits(out, currentByte, bitSize);
-            printf("%c", currentByte);
+      streamWriteBits(out, currentByte, bitSize);
       dictionaryDel(dictionary);
       dictIndex = 256;
       dictionaryEntryInitializer(dictionary);
@@ -37,7 +32,6 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
     
     code = dictionaryFindLongestMatchingEntry(in, dictionary)->code;
 
-  // printf("%s\n", code);
     /*
     * append currentByte to the marked code passed in from dictionaryFindLongestMatchingEntry then add it into dictionary
     * utilizes getIntFromChar to dig through the dictionary to obtain the correct index to be written
@@ -54,28 +48,6 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
       }
       dictIndex++;
     }
-    // else{
-
-      // dictionaryDel(dictionary);
-      // dictIndex = 256;
-      // dictionaryEntryInitializer(dictionary);
-      // dictionary->entries[256].code = code;
-      // dictIndex++;
-      
-      // if(dictionaryAdd(dictionary, codeNewAndAppend(code, currentByte), dictIndex) == 1){          
-        // printf("%s", code);
-    
-        // result = getIntFromChar(dictionary, code);
-        // streamWriteBits(out, result, bitSize);
-
-        // if(in->byteIndex == -1){
-          // streamWriteBits(out, 0, bitSize);
-          // break;
-        // }
-          // dictIndex++;
-      // }
-    // }
-
   }
 }
 
@@ -96,10 +68,11 @@ int getIntFromChar(Dictionary *dict, unsigned char *code){
     return byte;
   }
 
-  else
+  else{
     for(i = 256 ; dict->length > i ; i++){
       if(strcmp(code, dict->entries[i].code) == 0){
         return i;
       }
     }
+  }
 }

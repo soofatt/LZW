@@ -1,4 +1,6 @@
 #include "Dictionary.h"
+#include "CException.h"
+#include "ErrorCode.h"
 #include <stdio.h>
 #include <malloc.h>
 #include <String.h>
@@ -6,13 +8,14 @@
 
 unsigned char currentByte;
 
-/*To create a new custom dictionary.
+/*
+ *  To create a new custom dictionary.
  *
- *Input: length -> the length dictionary.
+ *  Input: length -> the length dictionary.
  *
- *Output:dictionary -> the dictionary.
+ * Output: dictionary -> the dictionary.
  *
- *Throw:  -
+ *  Throw:  -
  *
  */
 Dictionary *dictionaryNew(int length){
@@ -24,14 +27,15 @@ Dictionary *dictionaryNew(int length){
 	return dictionary;
 }
 
-/*To append a character to a string
+/*
+ * To append a character to a string
  *
- *Input: *oldCode -> the old string
- *       codeToAppend -> the character to be appended to the old string.
+ * Input: *oldCode -> the old string
+ *        codeToAppend -> the character to be appended to the old string.
  *
- *Output:newCode -> the new string with the appended character.
+ * Output:newCode -> the new string with the appended character.
  *
- *Throw:  -
+ * Throw:  -
  *
  */
 char *codeNewAndAppend(char *oldCode, char codeToAppend){
@@ -87,9 +91,6 @@ void dictionaryDel(Dictionary *dict){
       dict->entries[i].code = NULL;
     }
 	}
-  
-      // printf("%d", dict->entries[5].code[20]);
-  // free(dict);
 }
 
 /*
@@ -102,7 +103,9 @@ void dictionaryDel(Dictionary *dict){
 */
 DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *dictionary){
   int byte = 0, index = 0, markIndex = 0, longestCode = 0, k = 0;
-  /*
+  int e;
+  
+ /*
   * check if in->currentbyte is 0
   *  0: byte will get value from file
   * !0: byte will get value from in->currentbyte
@@ -146,18 +149,20 @@ DictionaryEntry *dictionaryFindLongestMatchingEntry(InStream *in, Dictionary *di
            break;
           
           //after marking longest index, read a byte
-          byte = streamReadBits(in, 8);
-
-          //solution to problem: streamReadBits will read null before reading -1, therefore encoder will write an extra byte
-          if(byte == 0){
+          Try{
             byte = streamReadBits(in, 8);
+          
+            //solution to problem: streamReadBits will read null before reading -1, therefore encoder will write an extra byte
+            if(byte == 0){
+              byte = streamReadBits(in, 8);
+            }
+          }Catch(e){
+            if(e == END_OF_STREAM){
+              in->byteIndex = -1;
+              return &dictionary->entries[markIndex];
+            }
           }
           
-          //if byte is -1, end
-          if(byte == -1){
-            // printf("-1\n");
-           return &dictionary->entries[markIndex];
-          }
           //save byte in currentByte global variable
           currentByte = byte;
         }
@@ -208,8 +213,7 @@ int isBlockSame(char *source, char *source2, int byteSize){
 */
 int firstMarkIndex(Dictionary *dictionary, int byte){
   int i, code;
-  // code = dictionary->entries[128].code[0];
-  // printf("%d", code);
+
   for(i = 0 ; i < 256 ; i++){
 
     if(byte == dictionary->entries[i].code[0])

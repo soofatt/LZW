@@ -48,8 +48,7 @@ int streamReadBits(InStream *in, int bitSize){
   uint8 byteToRead, tempBitRead = 0;
   
   if(feof(in->file) != 0){
-    in->byteIndex = -1;
-    return -1;
+    Throw(END_OF_STREAM);
   }
 
   while(byteCount <= (bitSize/8)){

@@ -26,9 +26,7 @@ OutStream *openOutStream(char *fileName, char *openMethod){
 /*
 * to write bits into file
 *
-* streamWriteBits will always write 8 bits into file
-* if bitsToWrite is more than 8 bits, it will be shifted >> to 8 bits, bit(s) that are shifted out will be saved
-* these saved bits will be the starting bit(s) for the next byte
+* streamWriteBits will always write 12 bits into file
 *
 * input: -       *out: pointer to OutStream struct
 *        -    bitSize: number of bits to be written
@@ -40,47 +38,44 @@ void streamWriteBits(OutStream *out, int bitsToWrite, int bitSize){
   //to remove 0xf from -128
   if(bitsToWrite < 256){
     bitsToWrite = bitsToWrite & 0xf0ff;
-    }
+  }
+  
+  //if bit size is 8
   if(bitSize == 8){
     out->currentByte = bitsToWrite;
     fputc(out->currentByte, out->file);
   }
+  //if bit size is 12
   else{
-  if(out->size == 0){
-    temp = bitsToWrite >> 4;
-    temp = out->currentByte | temp;
-  }
-  else{
-    temp = bitsToWrite >> 8;
-    temp = out->currentByte | temp;
-  }
-  // printf("temp: %x\n", temp);
-  // printf("bits: %x\n", bitsToWrite);
-  // printf("out: %x\n", out->size);
-  // printf("current before: %x\n", out->currentByte);
+    if(out->size == 0){
+      temp = bitsToWrite >> 4;
+      temp = out->currentByte | temp;
+    }
+    else{
+      temp = bitsToWrite >> 8;
+      temp = out->currentByte | temp;
+    }
 
-  for(i = 0 ; i < 8 ; i++){
+    for(i = 0 ; i < 8 ; i++){
 
-    out->currentByte = out->currentByte << 1;
-    bit = (temp >> 7-i)&0x01;
-    streamWriteBit(out, bit);
+      out->currentByte = out->currentByte << 1;
+      bit = (temp >> 7-i)&0x01;
+      streamWriteBit(out, bit);
 
-  }
-  fputc(out->currentByte, out->file);
-  // printf("write: %x\n", out->currentByte);
-  
-  if(out->size == 0){
-    out->currentByte = bitsToWrite << 4;
-    out->size = 1;
-  }
-  else{
-    out->currentByte = bitsToWrite;
-    streamFlush(out);
-    out->currentByte = bitsToWrite << 8;
-      // printf("flush\n");
-    out->size = 0;
-  }
-  // printf("current: %x\n", out->currentByte);
+    }
+    fputc(out->currentByte, out->file);
+    
+    if(out->size == 0){
+      out->currentByte = bitsToWrite << 4;
+      out->size = 1;
+    }
+    else{
+      out->currentByte = bitsToWrite;
+      streamFlush(out);
+      out->currentByte = bitsToWrite << 8;
+      out->size = 0;
+    }
+
   }
 }
 

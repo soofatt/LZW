@@ -65,21 +65,6 @@ void test_lzwEncoder_encode_banana_nanaba(){
   lzwEncoder(in, dictionary, out);
 }
 
-// void test_lzwEncoder_to_encode_a_file(){
-  // CEXCEPTION_T e;
-  // OutStream *out;
-  // InStream *in;
-  // Dictionary *dictionary = dictionaryNew(4000);
-  // currentByte = 0;
-  // in = openInStream("test/Data/LZW_Encode_Test_Input.txt", "r");
-  // out = openOutStream("test/Data/LZW_Encode_Test_Output.txt", "w");
-
-  // lzwEncoder(in, dictionary, out);
-  
-  // closeInStream(in);
-  // closeOutStream(out);
-// }
-
 void test_lzwEncoder_encode_ban(){
   CEXCEPTION_T e;
   OutStream *out;

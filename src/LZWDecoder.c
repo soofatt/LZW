@@ -53,9 +53,7 @@ void lzwDecode(InStream *in, Dictionary *dict, OutStream *out){
     
     inputCode = streamReadBits(in, bitReadSize);
     
-    if(inputCode == -1)
-      Throw(END_OF_STREAM);
-    else if(inputCode < -1 || inputCode > (dict->length))
+    if(inputCode < -1 || inputCode > (dict->length))
       Throw(ERR_INVALID_INDEX);
       
     translation = _getDictTranslation(dict, inputCode);
