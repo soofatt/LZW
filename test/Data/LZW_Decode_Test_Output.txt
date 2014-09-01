@@ -299,14 +299,15 @@ See the ChangeLog files for details.
 	Added --enable-purify-safety to keep Purify from complaining
 	about certain low level code.
 	Sparc fix for calling functions with < 6 args.
-	Linux x86 a.oStfix.
+	Linux x86 a.out fix.
 
 1.12 Nov-22-96
-	Added missing fat_type_void, neasas oor suppbfftased  Che return.1TBD.s. Ftu ltest caselibfi non MIPS rachasetpURCygnus Sbpart.1elk ow 
-Wha is lolStiwar<U
+	Added missingtaat_type_void, neasastaor supplibtased   Ch return.1 TBDs. Ftuhe tesStcase lbffnon MIPS rachasett<UCygnus Seb
+prt.1elckow 
+
+
+Wha ioluagce <
 =====1 Oct-303.0.
-14 w lewttisabotaGNUffikes
+14 whe rchtat aboler GNU/lkes
 =
-===10evel fi9ua.14 was cwaratgdaagewar oturc===
-re.e tat fs.mpilerhiw ===09n la2nv.0ntgens --en cy,-wabud s.nThdaurswit/>
-y,an-bisbso lventLCLase====
+===10h evfi9ng.14 was cceatgpdarsewatxou=====ewdethaonsmpilerforow===09inve2con.0venes s --enraary-wabud onsn. Tpdsoswitffi.aryan-ebat b//he ce LCL
