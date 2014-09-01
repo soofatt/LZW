@@ -46,7 +46,7 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
 
       result = getIntFromChar(dictionary, code);
       streamWriteBits(out, result, bitSize);
-
+      
      //end
      if(in->byteIndex == -1){
         streamWriteBits(out, 0, bitSize);
@@ -88,7 +88,7 @@ void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out){
 * output: -byte: the integer form of the character
 *         -   i: the dictionary index that contains the entry that matches the input code
 */
-int getIntFromChar(Dictionary *dict, char *code){
+int getIntFromChar(Dictionary *dict, unsigned char *code){
   unsigned int byte, i;
 
  if(strlen(code) == 1){

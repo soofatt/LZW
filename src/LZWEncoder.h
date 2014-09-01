@@ -6,5 +6,5 @@
 
 
 void lzwEncoder(InStream *in, Dictionary *dictionary, OutStream *out);
-int getIntFromChar(Dictionary *dict, char *code);
+int getIntFromChar(Dictionary *dict, unsigned char *code);
 #endif // LZWEncoder_H

@@ -13,7 +13,7 @@ void test_lzwDecoder_to_decode_246(){
   CEXCEPTION_T e;
   OutStream *out;
   InStream *in;
-  Dictionary *dictionary = dictionaryNew(4000);
+  Dictionary *dictionary = dictionaryNew(4096);
   currentByte = 0;
   in = openInStream("test/Data/LZW_input_246.txt", "rb");
   out = openOutStream("test/Data/LZW_output_246.txt", "wb");
@@ -37,7 +37,7 @@ void test_lzwDecoder_to_decode_246(){
 
 void test_lzwDecode_given_code_97_should_decode_into_a(){
   CEXCEPTION_T e;
-  Dictionary *dictionary = dictionaryNew(100);
+  Dictionary *dictionary = dictionaryNew(4096);
   OutStream *out = openOutStream("test/data/LZWDecodeOutput_1.txt", "wb");
   InStream *in = openInStream("test/data/LZWDecodeInput_1.txt", "rb");
   
@@ -61,7 +61,7 @@ void test_lzwDecode_given_code_97_should_decode_into_a(){
 
 void test_lzwDecode_given_code_98_97_should_decode_into_ba(){
   CEXCEPTION_T e;
-  Dictionary *dictionary = dictionaryNew(100);
+  Dictionary *dictionary = dictionaryNew(4096);
   OutStream *out = openOutStream("test/data/LZWDecodeOutput_2.txt", "wb");
   InStream *in = openInStream("test/data/LZWDecodeInput_2.txt", "rb");
   
@@ -85,7 +85,7 @@ void test_lzwDecode_given_code_98_97_should_decode_into_ba(){
 
 void test_lzwDecode_given_code_98_97_110_should_decode_into_ban(){
   CEXCEPTION_T e;
-  Dictionary *dictionary = dictionaryNew(100);
+  Dictionary *dictionary = dictionaryNew(4096);
   OutStream *out = openOutStream("test/data/LZWDecodeOutput_3.txt", "wb");
   InStream *in = openInStream("test/data/LZWDecodeInput_3.txt", "rb");
   
