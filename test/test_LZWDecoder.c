@@ -11,7 +11,7 @@ void tearDown(void){}
 
 void test_emitCode_given_index_97_should_translate_to_a_and_output_a(){
   CEXCEPTION_T e;
-  Dictionary *dictionary = dictionaryNew(100);
+  Dictionary *dictionary = dictionaryNew(1000);
   OutStream out;
   int index = 97;
   
@@ -26,7 +26,7 @@ void test_emitCode_given_index_97_should_translate_to_a_and_output_a(){
 
 void test_emitCode_given_index_neg_1_should_throw_error(){
   CEXCEPTION_T e;
-  Dictionary *dictionary = dictionaryNew(100);
+  Dictionary *dictionary = dictionaryNew(1000);
   OutStream out;
   int index = -1;
   
@@ -39,7 +39,7 @@ void test_emitCode_given_index_neg_1_should_throw_error(){
 
 void test_emitCode_given_index_256_should_translate_to_ab_and_output_a_b(){
   CEXCEPTION_T e;
-  Dictionary *dictionary = dictionaryNew(100);
+  Dictionary *dictionary = dictionaryNew(1000);
   dictionary->entries[0].code = "ab";
   OutStream out;
   int index = 256;
@@ -55,7 +55,7 @@ void test_emitCode_given_index_256_should_translate_to_ab_and_output_a_b(){
 }
 
 void test_emitCode_given_index_257_should_translate_to_nan_and_output_nan(){
-  Dictionary *dictionary = dictionaryNew(100);
+  Dictionary *dictionary = dictionaryNew(1000);
   dictionary->entries[1].code = "nan";
   OutStream out;
   int index = 257;
@@ -69,13 +69,13 @@ void test_emitCode_given_index_257_should_translate_to_nan_and_output_nan(){
 
 void test_lzwDecode_given_code_97_should_decode_into_a(){
   CEXCEPTION_T e;
-  Dictionary *dictionary = dictionaryNew(100);
+  Dictionary *dictionary = dictionaryNew(1000);
   OutStream out;
   InStream in;
    
   streamReadBits_ExpectAndReturn(&in, 12, 97);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 12, -1);
+  streamReadBits_ExpectAndThrow(&in, 12, END_OF_STREAM);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -86,7 +86,7 @@ void test_lzwDecode_given_code_97_should_decode_into_a(){
 
 void test_lzwDecode_given_code_98_97_110_should_decode_into_ban(){
   CEXCEPTION_T e;
-  Dictionary *dictionary = dictionaryNew(100);
+  Dictionary *dictionary = dictionaryNew(1000);
   OutStream out;
   InStream in;
    
@@ -96,7 +96,7 @@ void test_lzwDecode_given_code_98_97_110_should_decode_into_ban(){
   streamWriteBits_Expect(&out, 97, 8);
   streamReadBits_ExpectAndReturn(&in, 12, 110);
   streamWriteBits_Expect(&out, 110, 8);
-  streamReadBits_ExpectAndReturn(&in, 12, -1);
+  streamReadBits_ExpectAndThrow(&in, 12, END_OF_STREAM);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -132,7 +132,7 @@ void test_lzwDecode_case_1_should_decode_into_abcdabc(){
   streamWriteBits_Expect(&out, 98, 8);
   streamReadBits_ExpectAndReturn(&in, 12, 99);
   streamWriteBits_Expect(&out, 99, 8);
-  streamReadBits_ExpectAndReturn(&in, 12, -1);
+  streamReadBits_ExpectAndThrow(&in, 12, END_OF_STREAM);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -169,7 +169,7 @@ void test_lzwDecode_case_2_should_decode_into_aaaaaaa(){
   streamWriteBits_Expect(&out, 97, 8);
   streamReadBits_ExpectAndReturn(&in, 12, 97);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 12, -1);
+  streamReadBits_ExpectAndThrow(&in, 12, END_OF_STREAM);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -206,7 +206,7 @@ void test_lzwDecode_case_3_should_decode_into_bananana(){
   streamWriteBits_Expect(&out, 97, 8);
   streamWriteBits_Expect(&out, 110, 8);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 12, -1);
+  streamReadBits_ExpectAndThrow(&in, 12, END_OF_STREAM);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -253,7 +253,7 @@ void test_lzwDecode_case_4_should_decode_into_banana_nanaba(){
   streamReadBits_ExpectAndReturn(&in, 12, 256);
   streamWriteBits_Expect(&out, 98, 8);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 12, -1);
+  streamReadBits_ExpectAndThrow(&in, 12, END_OF_STREAM);
   
   Try{
     lzwDecode(&in, dictionary, &out);
@@ -369,23 +369,4 @@ void test_getDictTranslation_given_258_index_2_larger_than_dict_length_should_th
 	}Catch(e){
     TEST_ASSERT_EQUAL(ERR_EXCEEDING_DICTIONARY_SIZE, e);
   }
-}
-
-void test_getBitsToRead_should_return_9_given_dict_size_256(){
-  Dictionary *dictionary = dictionaryNew(100);
-  int result;
-  
-  result = getBitsToRead(dictionary);
-  
-  TEST_ASSERT_EQUAL(9, result);
-}
-
-void test_getBitsToRead_should_return_3_given_dict_size_4(){
-  Dictionary *dictionary = dictionaryNew(100);
-  int result;
-  dictionary->size = 4;
-  
-  result = getBitsToRead(dictionary);
-  
-  TEST_ASSERT_EQUAL(3, result);
 }

@@ -29,28 +29,33 @@ char *(*_getDictTranslation)(Dictionary *dict, int inputIndex) = getDictTranslat
  *
  */
 void lzwDecode(InStream *in, Dictionary *dict, OutStream *out){
-  int inputCode, dictIndex = 0, bitLimit, bitsToRead, counter = 0;
+  int inputCode, dictIndex = 0;
   char *currentString, *translation, *newDictEntry;
-  
-  bitsToRead = getBitsToRead(dict);
   
   inputCode = streamReadBits(in, bitReadSize);
   
-  if(inputCode < -1 || inputCode > (dict->length + 256))
+  if(inputCode <= -1 || inputCode > (dict->length))
     Throw(ERR_INVALID_INDEX);
-  else if(inputCode == -1)
-    printf("EOF?\n");
     
   emitCode(dict, inputCode, out);
   translation = _getDictTranslation(dict, inputCode);
   currentString = translation;
-  bitLimit = 1 << (bitsToRead - 1);
   
-  while(inputCode != -2){
+  while(1){
+    if(dictIndex == 3840){//4096 - 256. For renewing dictionary together with encoder.
+      dictionaryDel(dict);
+      dictIndex = 0;
+      inputCode = streamReadBits(in, bitReadSize);
+      emitCode(dict, inputCode, out);
+      translation = _getDictTranslation(dict, inputCode);
+      currentString = translation;
+    }
+    
     inputCode = streamReadBits(in, bitReadSize);
+    
     if(inputCode == -1)
       Throw(END_OF_STREAM);
-    else if(inputCode > (dict->length + 256))
+    else if(inputCode < -1 || inputCode > (dict->length))
       Throw(ERR_INVALID_INDEX);
       
     translation = _getDictTranslation(dict, inputCode);
@@ -70,31 +75,6 @@ void lzwDecode(InStream *in, Dictionary *dict, OutStream *out){
     
     emitCode(dict, inputCode, out);
     currentString = translation;
-    
-    counter++;
-    if(counter == bitLimit){
-      bitsToRead++;
-      bitLimit = 1 << (bitsToRead - 1);
-    }
-  }
-}
-
-/*To find the number of bits to be read by streamReadBits function.
- *
- *Input: *dict -> the dictionary.
- *
- *Output:i -> the number of bits that is to be read.
- *
- *Throw:  -
- *
- */
-int getBitsToRead(Dictionary *dict){
-  int i;
-  
-  for(i = 0; i < dict->size; i++){
-    if((1 << i) > dict->size){
-      return i;
-    }
   }
 }
 
@@ -118,8 +98,6 @@ char *getDictTranslation(Dictionary *dict, int inputIndex){
     index = getIndex(inputIndex);//To find the corresponding index for the custom dictionary
     translation = dict->entries[index].code;
   }
-  // else if(inputIndex > (dict->length + 256))
-    // Throw(ERR_EXCEEDING_DICTIONARY_SIZE);
   
   return translation;
 }

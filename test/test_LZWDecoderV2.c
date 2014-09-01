@@ -15,6 +15,7 @@ char *newGetDictTranslation(Dictionary *dict, int inputIndex);
 void updateDictionary(Dictionary *dict, char code, int index);
 void emitCodeForTesting(Dictionary *dict, int index, OutStream *out);
 void lzwDecodeForTesting(InStream *in, Dictionary *dict, OutStream *out);
+int getBitsToReadForTesting(Dictionary *dict);
 
 void setUp(void){
   oldGetDictTranslation = _getDictTranslation;
@@ -39,7 +40,7 @@ void lzwDecodeForTesting(InStream *in, Dictionary *dict, OutStream *out){
   int inputCode, dictIndex = 4, bitLimit, bitsToRead, counter = 0;
   char *currentString, *translation, *newDictEntry;
   
-  bitsToRead = getBitsToRead(dict);
+  bitsToRead = getBitsToReadForTesting(dict);
   inputCode = streamReadBits(in, (bitsToRead - 1));
   emitCodeForTesting(dict, inputCode, out);
   translation = _getDictTranslation(dict, inputCode);
@@ -93,6 +94,16 @@ void emitCodeForTesting(Dictionary *dict, int index, OutStream *out){
   }
 }
 
+int getBitsToReadForTesting(Dictionary *dict){
+  int i;
+  
+  for(i = 0; i < dict->size; i++){
+    if((1 << i) > dict->size){
+      return i;
+    }
+  }
+}
+
 void updateDictionary(Dictionary *dict, char code, int index){
   char *codeToAdd = codeNewAndAppend("", code);
   int temp;
@@ -131,7 +142,7 @@ void test_lzwDecode_given_bits_to_read_2_should_increase_to_4(){
   streamWriteBits_Expect(&out, 98, 8);
   streamReadBits_ExpectAndReturn(&in, 4, 2);
   streamWriteBits_Expect(&out, 99, 8);
-  streamReadBits_ExpectAndReturn(&in, 4, -1);
+  streamReadBits_ExpectAndThrow(&in, 4, END_OF_STREAM);
   
   Try{
     lzwDecodeForTesting(&in, dictionary, &out);
@@ -185,7 +196,7 @@ void test_lzwDecode_given_bits_to_read_2_should_increase_to_4_case_2(){
   streamWriteBits_Expect(&out, 97, 8);
   streamReadBits_ExpectAndReturn(&in, 4, 0);
   streamWriteBits_Expect(&out, 97, 8);
-  streamReadBits_ExpectAndReturn(&in, 4, -1);
+  streamReadBits_ExpectAndThrow(&in, 4, END_OF_STREAM);
   
   Try{
     lzwDecodeForTesting(&in, dictionary, &out);
